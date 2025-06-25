@@ -75,13 +75,11 @@ This integration can be installed and updated easily using [HACS](https://hacs.x
 
 5. Click **Add**
 
-6. The integration will now appear in the list.  
-Click on it and select **Install**.
+6. The integration will now appear in the list. Click on it and select **Install**.
 
 7. **Restart Home Assistant**
 
-8. Go to **Settings → Devices & Services → Add Integration**,  
-search for **„openWB“** and follow the setup wizard.
+8. Go to **Settings → Devices & Services → Add Integration**, search for **„openWB“** and follow the setup wizard.
 
 ---
 # openWB Home Assistant Integration - GERMAN
@@ -157,8 +155,7 @@ Diese Integration kann ganz einfach über [HACS](https://hacs.xyz/) installiert 
 
 5. Klicke auf **Hinzufügen**
 
-6. Die Integration erscheint nun in der Liste.  
-Klicke darauf und wähle **Installieren**
+6. Die Integration erscheint nun in der Liste. Klicke darauf und wähle **Installieren**
 
 7. **Starte Home Assistant neu**
 
