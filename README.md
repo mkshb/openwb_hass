@@ -58,6 +58,31 @@ These templates are displayed as human-readable text (e.g., `Fast Charge`, `Over
 - [ ] Multilingual UI (DE/EN)
 
 ---
+## 🧩 Installation via HACS
+
+This integration can be installed and updated easily using [HACS](https://hacs.xyz/):
+
+### 📦 Step-by-step instructions
+
+1. **Open HACS** in your Home Assistant UI  
+   → Go to **HACS → Integrations**
+
+2. Click on **„+ Explore & Download Repositories“**
+
+3. In the top right, click on **„⋮ → Custom repositories“**
+
+4. Enter the URL of this repository:  https://github.com/mkshb/openwb_hass and choose **„Integration“** as category
+
+5. Click **Add**
+
+6. The integration will now appear in the list.  
+Click on it and select **Install**.
+
+7. **Restart Home Assistant**
+
+8. Go to **Settings → Devices & Services → Add Integration**,  
+search for **„openWB“** and follow the setup wizard.
+
 ---
 # openWB Home Assistant Integration - GERMAN
 
@@ -114,7 +139,30 @@ Diese Vorlagen werden korrekt als lesbarer Text angezeigt (z. B. `Schnellladen
 - [ ] Automatisierte Ladeplanung mit PV-/SoC-Prognosen
 - [ ] Mehrsprachige Oberfläche (DE/EN)
 
+---
+## 🧩 Installation über HACS
 
+Diese Integration kann ganz einfach über [HACS](https://hacs.xyz/) installiert und aktualisiert werden:
+
+### 📦 Schritt-für-Schritt-Anleitung
+
+1. **Öffne HACS** in der Home Assistant-Oberfläche  
+   → Gehe zu **HACS → Integrationen**
+
+2. Klicke auf **„+ Durchsuchen & Repositories herunterladen“**
+
+3. Klicke oben rechts auf **„⋮ → Benutzerdefinierte Repositories“**
+
+4. Gib folgende Repository-URL ein:  https://github.com/mkshb/openwb_hass und wähle **„Integration“** als Kategorie
+
+5. Klicke auf **Hinzufügen**
+
+6. Die Integration erscheint nun in der Liste.  
+Klicke darauf und wähle **Installieren**
+
+7. **Starte Home Assistant neu**
+
+8. Gehe zu **Einstellungen → Geräte & Dienste → Integration hinzufügen**, suche nach **„openWB“** und folge dem Einrichtungsassistenten.
 ---
 
 # Screenshots
