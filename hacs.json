@@ -1,0 +1,7 @@
+{
+  "name": "openWB Integration",
+  "content_in_root": false,
+  "domain": "openwb",
+  "homeassistant": "2025.0.0",
+  "render_readme": true
+}

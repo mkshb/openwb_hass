@@ -1,0 +1,33 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "openWB Integration einrichten",
+        "description": "Diese Integration verbindet Home Assistant mit einer openWB Wallbox über MQTT.",
+        "data": {}
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zur Wallbox fehlgeschlagen.",
+      "unknown": "Unbekannter Fehler"
+    },
+    "abort": {
+      "already_configured": "Diese openWB-Instanz ist bereits konfiguriert."
+    }
+  },
+  "title": "openWB Wallbox",
+  "entity": {
+    "sensor": {
+      "state": {
+        "charging": "Ladevorgang läuft",
+        "idle": "Warte auf Fahrzeug"
+      }
+    }
+  },
+  "device_automation": {
+    "trigger_type": {
+      "charging_started": "Ladevorgang gestartet",
+      "charging_stopped": "Ladevorgang gestoppt"
+    }
+  }
+}
