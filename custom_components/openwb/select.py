@@ -29,9 +29,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
             continue
     
         for ident in device.identifiers:
+            if not isinstance(ident, tuple) or len(ident) != 2:
+                continue
             domain, ident_str = ident
             if domain == DOMAIN and ident_str.startswith("openwb_vehicle_"):
-                vehicle_id = ident_str.split("_")[-1]
+                vehicle_id = ident_str.rsplit("_", 1)[-1]
                 entities.append(OpenWBChargeTemplateSelector(vehicle_id))
 
     async_add_entities(entities)
