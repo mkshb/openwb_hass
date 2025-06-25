@@ -56,8 +56,23 @@ These templates are displayed as human-readable text (e.g., `Fast Charge`, `Over
 - [ ] Extended control of openWB via `set/` topics
 - [ ] Automated charging planning using PV/SoC forecasts
 - [ ] Multilingual UI (DE/EN)
+- [ ] Provide Lovelace Dashboard(s)
 
 ---
+
+### 🔗 Requirements: MQTT integration
+
+This integration requires the official [MQTT integration](https://www.home-assistant.io/integrations/mqtt/) to be installed and configured.
+The openWB topics must also be transferred to this instance. Either via MQTT bridge from openWB, or via a customized configuration of Mosquitto, for example.
+
+To enable MQTT:
+
+1. Go to **Settings → Devices & Services**
+2. Click on **„+ Add Integration“**
+3. Search for **MQTT** and follow the setup wizard
+
+---
+
 ## 🧩 Installation via HACS
 
 This integration can be installed and updated easily using [HACS](https://hacs.xyz/):
@@ -124,6 +139,8 @@ Diese Vorlagen werden korrekt als lesbarer Text angezeigt (z. B. `Schnellladen
 - Die Integration erstellt automatisch eine `select`-Entität für jedes erkannte Fahrzeug.
 - Diese Entität erlaubt es, das aktuell verwendete `charge_template`-Profil direkt über die Home Assistant-Oberfläche umzuschalten.
 
+---
+
 ## 🛣️ Roadmap
 
 - [x] Automatische Erkennung von MQTT-Topics (`openWB/#`)
@@ -136,8 +153,23 @@ Diese Vorlagen werden korrekt als lesbarer Text angezeigt (z. B. `Schnellladen
 - [ ] Weitere Steuerung von openWB via `set/`-Topics
 - [ ] Automatisierte Ladeplanung mit PV-/SoC-Prognosen
 - [ ] Mehrsprachige Oberfläche (DE/EN)
+- [ ] Lovelace Dashboard(s) bereitstellen
 
 ---
+
+## 🔗 Anforderungen: MQTT-Integration
+
+Für diese Integration muss die offizielle [MQTT-Integration] (https://www.home-assistant.io/integrations/mqtt/) installiert und konfiguriert sein.
+Die openWB-Themen müssen ebenfalls in diese Instanz übertragen werden. Entweder über die MQTT-Bridge von openWB, oder über eine angepasste Konfiguration von z.B. Mosquitto.
+
+So aktivieren Sie MQTT:
+
+1. Gehen Sie zu **Einstellungen → Geräte & Dienste**
+2. Klicken Sie auf **„+ Integration hinzufügen “**.
+3. Suchen Sie nach **MQTT** und folgen Sie dem Einrichtungsassistenten
+
+---
+
 ## 🧩 Installation über HACS
 
 Diese Integration kann ganz einfach über [HACS](https://hacs.xyz/) installiert und aktualisiert werden:
@@ -164,6 +196,6 @@ Diese Integration kann ganz einfach über [HACS](https://hacs.xyz/) installiert 
 
 # Screenshots
 
-![Overview Entities](images/overview-entities.png)
-![Example Entities](images/example-entities.png)
-![Change Charging Template](images/change-charging-template.png)
+![Overview Entities](custom_components/openwb/images/change-charging-template.png)
+![Example Entities](custom_components/openwb/images/example-entities.png)
+![Change Charging Template](custom_components/openwb/images/change-charging-template.png)
