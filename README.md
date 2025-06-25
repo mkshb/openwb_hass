@@ -63,13 +63,27 @@ These templates are displayed as human-readable text (e.g., `Fast Charge`, `Over
 ### 🔗 Requirements: MQTT integration
 
 This integration requires the official [MQTT integration](https://www.home-assistant.io/integrations/mqtt/) to be installed and configured.
-The openWB topics must also be transferred to this instance. Either via MQTT bridge from openWB, or via a customized configuration of Mosquitto, for example.
+The openWB topics must also be transferred to this instance. Either via MQTT bridge from openWB or via a customized configuration of Mosquitto, for example.
 
 To enable MQTT:
 
 1. Go to **Settings → Devices & Services**
 2. Click on **„+ Add Integration“**
 3. Search for **MQTT** and follow the setup wizard
+
+Example Mosquitto Bridge Config (not openWB MQTT Bridge) to subscribe all openWB/# topics
+```
+#################################################################
+# openWB MQTT Bridge
+#################################################################
+connection openwb-bridge
+address <openwb-ip>:1883
+clientid mosquitto-openwb-bridge
+try_private false
+cleansession true
+start_type automatic
+topic openWB/# both 2
+```
 
 ---
 
@@ -160,13 +174,27 @@ Diese Vorlagen werden korrekt als lesbarer Text angezeigt (z. B. `Schnellladen
 ## 🔗 Anforderungen: MQTT-Integration
 
 Für diese Integration muss die offizielle [MQTT-Integration] (https://www.home-assistant.io/integrations/mqtt/) installiert und konfiguriert sein.
-Die openWB-Themen müssen ebenfalls in diese Instanz übertragen werden. Entweder über die MQTT-Bridge von openWB, oder über eine angepasste Konfiguration von z.B. Mosquitto.
+Die openWB-Themen müssen ebenfalls in diese Instanz übertragen werden. Entweder über die MQTT-Bridge von openWB oder über eine angepasste Konfiguration von z.B. Mosquitto.
 
 So aktivieren Sie MQTT:
 
 1. Gehen Sie zu **Einstellungen → Geräte & Dienste**
 2. Klicken Sie auf **„+ Integration hinzufügen “**.
 3. Suchen Sie nach **MQTT** und folgen Sie dem Einrichtungsassistenten
+
+Beispiel Mosquitto Bridge Config (nicht openWB MQTT Bridge) um alle openWB/# Topics zu abonnieren
+```
+#################################################################
+# openWB MQTT Bridge
+#################################################################
+connection openwb-bridge
+address <openwb-ip>:1883
+clientid mosquitto-openwb-bridge
+try_private false
+cleansession true
+start_type automatic
+topic openWB/# both 2
+```
 
 ---
 
