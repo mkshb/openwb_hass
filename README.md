@@ -75,6 +75,7 @@ These templates are displayed as human-readable text (e.g., `Fast Charge`, `Over
 - [x] Chargepoint configuration mapped to individual entities
 - [x] Select entities for choosing charge templates
 - [x] Device naming according to openWB configuration
+- [x] Implement full control of openWB charge_template
 
 ### Planned:
 - [ ] Extended control of openWB via `set/` topics
@@ -194,6 +195,7 @@ Diese Vorlagen werden korrekt als lesbarer Text angezeigt (z. B. `Schnellladen
 - [x] Ladepunkt-Konfiguration als Entitäten
 - [x] Select-Entitäten für Ladeprofile
 - [x] Benennung von Home Assistant Geräten nach openWB Konfiguration
+- [x] openWB charge_template aus Home Assistant heraus anpassen
 
 ### Geplant:
 - [ ] Weitere Steuerung von openWB via `set/`-Topics
