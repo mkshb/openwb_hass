@@ -263,6 +263,6 @@ Diese Integration kann ganz einfach über [HACS](https://hacs.xyz/) installiert 
 
 # Screenshots
 
-![Overview Entities](custom_components/openwb/images/change-charging-template.png)
+![Overview Entities](custom_components/openwb/images/overview-entities.png)
 ![Example Entities](custom_components/openwb/images/example-entities.png)
 ![Change Charging Template](custom_components/openwb/images/change-charging-template.png)
