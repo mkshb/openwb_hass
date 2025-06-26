@@ -14,6 +14,9 @@ from .template_cache import (
     get_ev_template_name,
 )
 from .select import SELECT_ENTITIES
+from .device_cache import get_device_info
+from .vehicle_cache import get_vehicle_info
+from .chargepoint_cache import get_chargepoint_info
 
 _LOGGER = logging.getLogger(__name__)
 COUNTER_BASE = f"{MQTT_PREFIX}/counter/"
@@ -320,21 +323,56 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     await async_subscribe(hass, f"{MQTT_PREFIX}/#", mqtt_message_received)
 
 
+from .device_cache import get_device_info
+
 class OpenWBBaseSensor(SensorEntity):
-    def __init__(self, dev_id: str, topic: str, key: str, initial_value, unit: str = None, icon: str = None, devtype: str = "device"):
+    def __init__(self, dev_id, topic, key, initial_value, unit: str = None, icon: str = None, devtype: str = "device"):
         self._topic = topic
         self._key = key
         self._dev_id = dev_id
         self._state = initial_value
-        self._attr_name = f"{devtype.upper()} {dev_id} {key.replace('_', ' ').title()}"
+
+        # Gerätedaten abrufen (nur falls dev_id eine Zahl ist)
+        device_name = f"{devtype.upper()} {dev_id}"
+        manufacturer = "openWB"
+        model = "openWB Device"
+
+        if isinstance(dev_id, int) or (isinstance(dev_id, str) and dev_id.isdigit()):
+            dev_id_int = int(dev_id)
+
+            MQTT_TO_CONFIG_TYPE = {
+                "counter": "counter",
+                "pv": "inverter",
+                "bat": "bat",
+                "vehicle": "vehicle",
+                "chargepoint": "chargepoint",
+            }
+            config_type = MQTT_TO_CONFIG_TYPE.get(devtype, devtype)
+
+            if devtype == "vehicle":
+                info = get_vehicle_info(dev_id_int)
+            elif devtype == "chargepoint":
+                info = get_chargepoint_info(dev_id_int)
+            else:
+                info = get_device_info(config_type, dev_id_int)
+
+            if info:
+                if info.get("name"):
+                    device_name = info["name"]
+                if info.get("manufacturer"):
+                    manufacturer = info["manufacturer"]
+                if info.get("model"):
+                    model = info["model"]
+
+        self._attr_name = f"openWB - {device_name} - {key.replace('_', ' ').title()}"
         self._attr_unique_id = f"openwb_{devtype.lower()}_{dev_id}_{key}"
         self._attr_native_unit_of_measurement = unit
         self._attr_icon = icon
         self._attr_device_info = {
             "identifiers": {(DOMAIN, f"openwb_{devtype.lower()}_{dev_id}")},
-            "name": f"openWB - {devtype.upper()} {dev_id}",
-            "manufacturer": "openWB",
-            "model": "MQTT",
+            "name": f"openWB – {devtype.upper()} - {device_name} (ID: {dev_id})",
+            "manufacturer": manufacturer,
+            "model": model,
         }
 
     @property
