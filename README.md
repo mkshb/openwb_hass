@@ -2,6 +2,29 @@
 
 This Home Assistant custom integration seamlessly connects your openWB charging station to your smart home via MQTT. It automatically reads all relevant MQTT data and creates matching sensors – including data for wallbox, vehicles, battery, and photovoltaic system (PV).
 
+## 📚 Table of Contents
+
+- [openWB Home Assistant Integration - ENGLISH](#openwb-home-assistant-integration---english)
+  - [🔧 Features](#-features)
+    - [✅ Automatic MQTT Discovery](#-automatic-mqtt-discovery)
+    - [⚡ Supported Device Categories](#-supported-device-categories)
+    - [🧠 Template Names](#-template-names)
+    - [🎚️ Select Entity for Charge Template](#️-select-entity-for-charge-template)
+  - [🛣️ Roadmap](#️-roadmap)
+  - [🔗 Requirements: MQTT integration](#-requirements-mqtt-integration)
+  - [🧩 Installation via HACS](#-installation-via-hacs)
+
+- [openWB Home Assistant Integration - GERMAN](#openwb-home-assistant-integration---german)
+  - [🔧 Funktionen](#-funktionen)
+    - [✅ Automatische MQTT-Erkennung](#-automatische-mqtt-erkennung)
+    - [⚡ Unterstützte Gerätegruppen](#-unterstützte-gerätegruppen)
+    - [🧠 Template-Namen](#-template-namen)
+    - [🎚️ Auswahl-Entität für Charge Template](#️-auswahl-entität-für-charge-template)
+  - [🛣️ Roadmap](#️-roadmap-1)
+  - [🔗 Anforderungen: MQTT-Integration](#-anforderungen-mqtt-integration)
+  - [🧩 Installation über HACS](#-installation-über-hacs)
+- [📸 Screenshots](#-screenshots)
+
 ---
 
 ## 🔧 Features
