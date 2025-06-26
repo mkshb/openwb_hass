@@ -19,7 +19,7 @@ def update_device_name(device_type: str, device_id: int, name: str, manufacturer
         "manufacturer": manufacturer,
         "model": model
     }
-    _LOGGER.warning(f"Updated device cache: {key} → name='{name}', manufacturer='{manufacturer}', model='{model}'")
+    _LOGGER.debug(f"Updated device cache: {key} → name='{name}', manufacturer='{manufacturer}', model='{model}'")
 
 def get_device_name(mqtt_type: str, device_id: int) -> str | None:
     config_type = _MQTT_TYPE_TO_CONFIG_TYPE.get(mqtt_type, mqtt_type)

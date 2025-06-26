@@ -1,4 +1,5 @@
 import logging
+import json
 from homeassistant.components.select import SelectEntity
 from homeassistant.components.mqtt import async_publish
 from homeassistant.config_entries import ConfigEntry
@@ -15,6 +16,18 @@ _LOGGER = logging.getLogger(__name__)
 SELECT_ENTITIES: list["OpenWBChargeTemplateSelector"] = []
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
+    from .charge_template_entity_config import CHARGE_TEMPLATE_CONFIG
+    from .charge_templates import create_editable_entity, drain_entity_queue_by_type, init_charge_template_entity_factory
+    # Initialisiere Factory für generische charge_template-Entitäten
+    init_charge_template_entity_factory(hass, async_add_entities)
+
+    # ➤ Füge generische Select-Entitäten hinzu
+    for template_id, path, value in drain_entity_queue_by_type("select"):
+        config_key = path.replace(".", "/")
+        entity_type = CHARGE_TEMPLATE_CONFIG.get(config_key, {}).get("type")
+
+        if entity_type == "select":
+            create_editable_entity(template_id, path, value)
 
     device_registry = async_get_device_registry(hass)
     entity_registry = async_get_entity_registry(hass)
@@ -58,7 +71,7 @@ class OpenWBChargeTemplateSelector(SelectEntity):
         current_template = None
         if info:
             template_id = str(info.get("charge_template"))
-            _LOGGER.warning(f"Template-ID für Vorauswahl: {template_id}")
+            _LOGGER.debug(f"Template ID pre-choise: {template_id}")
             current_template = get_charge_template_name(template_id)
 
         self._attr_current_option = current_template or "Template 0"
@@ -95,3 +108,4 @@ class OpenWBChargeTemplateSelector(SelectEntity):
     def get_template_id(self) -> str | None:
         info = get_vehicle_info(int(self._vehicle_id))
         return str(info.get("charge_template")) if info else None
+
