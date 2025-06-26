@@ -134,7 +134,7 @@ class ChargeTemplateSelectEntity(SelectEntity):
         template_name = get_charge_template_name(str(template_id))
         self._attr_device_info = {
             "identifiers": {(DOMAIN, f"charge_template_{template_id}")},
-            "name": f"openWB – Charge Template – {template_name} – (ID: {template_id})",
+            "name": f"openWB – Charge Template – {template_name} (ID: {template_id})",
             "manufacturer": "openWB",
             "model": "Charge Template",
         }
@@ -238,7 +238,7 @@ class ChargeTemplateTextEntity(ChargeTemplateBase, TextEntity):
         template_name = get_charge_template_name(str(template_id))
         self._attr_device_info = {
             "identifiers": {(DOMAIN, f"charge_template_{template_id}")},
-            "name": f"openWB – Charge Template – {template_name} – (ID: {template_id})",
+            "name": f"openWB – Charge Template – {template_name} (ID: {template_id})",
             "manufacturer": "openWB",
             "model": "Charge Template",
         }
@@ -262,7 +262,7 @@ class ChargeTemplateNumberEntity(ChargeTemplateBase, NumberEntity):
         template_name = get_charge_template_name(str(template_id))
         self._attr_device_info = {
             "identifiers": {(DOMAIN, f"charge_template_{template_id}")},
-            "name": f"openWB – Charge Template – {template_name} – (ID: {template_id})",
+            "name": f"openWB – Charge Template – {template_name} (ID: {template_id})",
             "manufacturer": "openWB",
             "model": "Charge Template",
         }
@@ -280,7 +280,7 @@ class ChargeTemplateSwitchEntity(ChargeTemplateBase, SwitchEntity):
         template_name = get_charge_template_name(str(template_id))
         self._attr_device_info = {
             "identifiers": {(DOMAIN, f"charge_template_{template_id}")},
-            "name": f"openWB – Charge Template – {template_name} – (ID: {template_id})",
+            "name": f"openWB – Charge Template – {template_name} (ID: {template_id})",
             "manufacturer": "openWB",
             "model": "Charge Template",
         }
