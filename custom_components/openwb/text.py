@@ -31,7 +31,7 @@ class ChargeTemplateTextEntity(TextEntity):
 
         template = charge_template_cache.get_template(self._template_id)
         if not template:
-            _LOGGER.warning("Template %s nicht gefunden", self._template_id)
+            _LOGGER.warning("Template %s not found", self._template_id)
             return
 
         utils.set_nested_value(template, self._path, value)

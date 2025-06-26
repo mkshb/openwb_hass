@@ -16,14 +16,14 @@ def _handle_vehicle_topic(msg):
     try:
         parts = topic.split("/")
         if len(parts) < 4:
-            _LOGGER.debug(f"Ignoriere zu kurzes Topic: {topic}")
+            _LOGGER.debug(f"Ignore too short topic: {topic}")
             return
 
         vehicle_id_str = parts[2]
         subkey = parts[3]
 
         if not vehicle_id_str.isdigit():
-            _LOGGER.debug(f"Ignoriere Topic mit nicht-numerischer ID: {topic}")
+            _LOGGER.debug(f"Ignore topic with non-numeric ID: {topic}")
             return
 
         vehicle_id = int(vehicle_id_str)
@@ -47,7 +47,7 @@ def _handle_vehicle_topic(msg):
             _LOGGER.debug(f"Vehicle {vehicle_id} {subkey} updated: {value}")
 
         else:
-            _LOGGER.debug(f"Ignoriere unbekanntes Vehicle-Subtopic: {subkey}")
+            _LOGGER.debug(f"Ignore unknown vehicle subtopic: {subkey}")
 
     except Exception as e:
         _LOGGER.warning(f"Error processing vehicle topic {topic} = {payload}: {e}")

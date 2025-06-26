@@ -90,7 +90,7 @@ class OpenWBChargeTemplateSelector(SelectEntity):
     async def async_select_option(self, option: str) -> None:
         template_id = get_template_id_by_name(option)
         if template_id is None:
-            _LOGGER.warning(f"Template-ID für '{option}' nicht gefunden.")
+            _LOGGER.warning(f"Template ID for '{option}' not found.")
             return
         topic = f"{MQTT_PREFIX}/set/vehicle/{self._vehicle_id}/charge_template"
         await async_publish(self.hass, topic, template_id, qos=0, retain=False)
@@ -103,7 +103,7 @@ class OpenWBChargeTemplateSelector(SelectEntity):
             self._attr_current_option = name
             self.async_write_ha_state()
         else:
-            _LOGGER.debug(f"Template-Name für ID {template_id} noch nicht im Cache. Warte auf spätere Aktualisierung.")
+            _LOGGER.debug(f"Template name for ID {template_id} not yet in the cache. Wait for later update.")
     
     def get_template_id(self) -> str | None:
         info = get_vehicle_info(int(self._vehicle_id))

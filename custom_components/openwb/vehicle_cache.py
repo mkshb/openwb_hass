@@ -8,7 +8,7 @@ def update_vehicle_info(vehicle_id: int | str, name: str | None = None, manufact
     try:
         vehicle_id = int(vehicle_id)
     except (ValueError, TypeError):
-        _LOGGER.warning(f"Ignoriere ungültige vehicle_id={vehicle_id} (nicht konvertierbar in int)")
+        _LOGGER.warning(f"Ignore invalid vehicle_id={vehicle_id}")
         return
 
     info = _vehicle_data.setdefault(vehicle_id, {})
@@ -24,7 +24,7 @@ def update_vehicle_templates(vehicle_id: int | str, key: str, value):
     try:
         vehicle_id = int(vehicle_id)
     except (ValueError, TypeError):
-        _LOGGER.warning(f"Ignoriere ungültige vehicle_id={vehicle_id} (nicht konvertierbar in int)")
+        _LOGGER.warning(f"Ignore invalid vehicle_id={vehicle_id}")
         return
 
     info = _vehicle_data.setdefault(vehicle_id, {})

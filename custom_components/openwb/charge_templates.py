@@ -49,13 +49,13 @@ def drain_entity_queue_by_type(entity_type: str):
 
 def create_editable_entity(template_id: str, path: str, value):
     if _hass is None or _async_add_entities is None:
-        _LOGGER.warning("Entitätsfactory noch nicht initialisiert: %s.%s", template_id, path)
+        _LOGGER.warning("Entity factory not yet initialized: %s.%s", template_id, path)
         return
 
     config_key = path.replace(".", "/")
     config = CHARGE_TEMPLATE_CONFIG.get(config_key)
     if not config:
-        _LOGGER.warning("Kein config-Eintrag für path: %s", path)
+        _LOGGER.warning("No config entry for path: %s", path)
         return
 
     unique_id = f"openwb_charge_template_{template_id}_{path.replace('.', '_')}"
@@ -67,7 +67,7 @@ def create_editable_entity(template_id: str, path: str, value):
 
     # 💡 Priorisiere konfigurierten Typ
     if path == "id":
-        _LOGGER.debug("Ignoriere nicht-editierbaren Pfad: %s", path)
+        _LOGGER.debug("Ignore non-editable path: %s", path)
         return
     elif entity_type == "switch":
         entity = ChargeTemplateSwitchEntity(_hass, template_id, path, value, friendly_name, unique_id)
@@ -78,11 +78,11 @@ def create_editable_entity(template_id: str, path: str, value):
     elif entity_type == "text" or isinstance(value, str):
         entity = ChargeTemplateTextEntity(_hass, template_id, path, value, friendly_name, unique_id)
     else:
-        _LOGGER.warning(f"Unbekannter oder nicht unterstützter Typ für {path}: {type(value)}")
+        _LOGGER.warning(f"Unknown or unsupported type for {path}: {type(value)}")
         return
 
     _async_add_entities([entity])
-    _LOGGER.debug(f"Entität erfolgreich erstellt: {friendly_name}")
+    _LOGGER.debug(f"Entity successfully created: {friendly_name}")
 
 async def setup_entities_from_queue(hass: HomeAssistant):
     queued = drain_entity_queue()
@@ -134,7 +134,7 @@ class ChargeTemplateSelectEntity(SelectEntity):
         template_name = get_charge_template_name(str(template_id))
         self._attr_device_info = {
             "identifiers": {(DOMAIN, f"charge_template_{template_id}")},
-            "name": f"openWB – Charge Template {template_name} – (ID: {template_id})",
+            "name": f"openWB – Charge Template – {template_name} – (ID: {template_id})",
             "manufacturer": "openWB",
             "model": "Charge Template",
         }
@@ -152,7 +152,7 @@ class ChargeTemplateSelectEntity(SelectEntity):
 
         template = get_charge_template(self._template_id)
         if not template:
-            _LOGGER.warning("Template %s nicht gefunden", self._template_id)
+            _LOGGER.warning("Template %s not found", self._template_id)
             return
 
         set_nested_value(template, self._path, option)
@@ -205,7 +205,7 @@ class ChargeTemplateSwitchEntity(SwitchEntity):
 
         template = charge_template_cache.get_template(self._template_id)
         if not template:
-            _LOGGER.warning("Template %s nicht gefunden", self._template_id)
+            _LOGGER.warning("Template %s not found", self._template_id)
             return
 
         utils.set_nested_value(template, self._path, state)
@@ -238,7 +238,7 @@ class ChargeTemplateTextEntity(ChargeTemplateBase, TextEntity):
         template_name = get_charge_template_name(str(template_id))
         self._attr_device_info = {
             "identifiers": {(DOMAIN, f"charge_template_{template_id}")},
-            "name": f"openWB – Charge Template {template_name} – (ID: {template_id})",
+            "name": f"openWB – Charge Template – {template_name} – (ID: {template_id})",
             "manufacturer": "openWB",
             "model": "Charge Template",
         }
@@ -262,7 +262,7 @@ class ChargeTemplateNumberEntity(ChargeTemplateBase, NumberEntity):
         template_name = get_charge_template_name(str(template_id))
         self._attr_device_info = {
             "identifiers": {(DOMAIN, f"charge_template_{template_id}")},
-            "name": f"openWB – Charge Template {template_name} – (ID: {template_id})",
+            "name": f"openWB – Charge Template – {template_name} – (ID: {template_id})",
             "manufacturer": "openWB",
             "model": "Charge Template",
         }
@@ -280,7 +280,7 @@ class ChargeTemplateSwitchEntity(ChargeTemplateBase, SwitchEntity):
         template_name = get_charge_template_name(str(template_id))
         self._attr_device_info = {
             "identifiers": {(DOMAIN, f"charge_template_{template_id}")},
-            "name": f"openWB – Charge Template {template_name} – (ID: {template_id})",
+            "name": f"openWB – Charge Template – {template_name} – (ID: {template_id})",
             "manufacturer": "openWB",
             "model": "Charge Template",
         }

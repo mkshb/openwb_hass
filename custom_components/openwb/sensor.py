@@ -74,7 +74,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
                         else:
                             sensors[sensor_id].update_state(value)
             except Exception as e:
-                _LOGGER.warning(f"Fehler beim Parsen von chargepoint config ({payload}) für {topic}: {e}")
+                _LOGGER.warning(f"Error parsing chargepoint config ({payload}) for {topic}: {e}")
             return
 
         # --- Save template definitions ---
@@ -88,9 +88,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
                     template_id = str(payload).strip()
                     template_name = f"Template {template_id}"
                 update_charge_template_name(template_id, template_name)
-                _LOGGER.debug(f"Charge-Template gespeichert: {template_id} = {template_name}")
+                _LOGGER.debug(f"Charge template saved: {template_id} = {template_name}")
             except Exception as e:
-                _LOGGER.warning(f"Fehler beim Parsen von charge_template Definition ({payload}): {e}")
+                _LOGGER.warning(f"Error parsing charge_template definition ({payload}): {e}")
             return
 
         elif topic.startswith(f"{MQTT_PREFIX}/vehicle/template/ev_template/"):
@@ -103,7 +103,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
                     update_ev_template_name(template_id, name)
                     _LOGGER.debug(f"EV-Template gespeichert: {template_id} = {name}")
             except Exception as e:
-                _LOGGER.warning(f"Fehler beim Parsen von ev_template Definition ({payload}): {e}")
+                _LOGGER.warning(f"Error parsing ev_template definition ({payload}): {e}")
             return
 
         # --- Summeries openWB/bat/get ---
@@ -211,7 +211,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
         # --- Vehicle special cases---
         if domain == "vehicle":
             if subkey.startswith("soc_module"):
-                _LOGGER.debug(f"Ignoriere soc_module-Wert für {topic}")
+                _LOGGER.debug(f"Ignore soc_module-Wert for {topic}")
                 return
 
             if subkey == "charge_template":
@@ -256,7 +256,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
                         else:
                             sensors[info_sensor_id].update_state(info_value)
                 except Exception as e:
-                    _LOGGER.warning(f"Fehler beim Parsen von vehicle info JSON ({payload}) für {topic}: {e}")
+                    _LOGGER.warning(f"Error parsing vehicle info JSON ({payload}) for {topic}: {e}")
                 return
 
         # --- List values ---

@@ -8,12 +8,10 @@ _LOGGER = logging.getLogger(__name__)
 CONFIG_TOPIC = "openWB/system/device/+/component/+/config"
 
 def subscribe_to_device_configs(mqtt_client):
-    """Subscribe to all openWB device component configs via MQTT."""
     mqtt_client.async_subscribe(CONFIG_TOPIC, _handle_component_config_message, 0)
     _LOGGER.debug(f"Subscribed to: {CONFIG_TOPIC}")
 
 def _handle_component_config_message(msg):
-    """Callback for received device configs."""
     topic = msg.topic
     payload = msg.payload
 

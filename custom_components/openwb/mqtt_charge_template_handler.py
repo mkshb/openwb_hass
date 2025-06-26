@@ -21,7 +21,7 @@ def _handle_charge_template_topic(msg):
 
     try:
         if not payload.strip().startswith(b"{"):
-            _LOGGER.debug(f"Ignoriere unvollständiges charge_template Topic: {topic}")
+            _LOGGER.warning(f"Ignore incomplete charge_template Topic: {topic}")
             return
 
         data = json.loads(payload.decode("utf-8"))
@@ -37,9 +37,9 @@ def _handle_charge_template_topic(msg):
                 _LOGGER.warning("Queueing charge_template entity: %s %s = %s", template_id, path, value)
                 queue_entity(template_id, path, value)
             else:
-                _LOGGER.debug("Nicht konfiguriert, ignoriere: %s", config_key)
+                _LOGGER.warning("Not configured, ignore: %s", config_key)
 
-        _LOGGER.debug(f"Charge Template empfangen und gespeichert: {template_id} = {template_name}")
+        _LOGGER.debug(f"Charge template received and saved: {template_id} = {template_name}")
 
     except Exception as e:
-        _LOGGER.warning(f"Fehler beim Verarbeiten von charge_template Topic {topic}: {e}")
+        _LOGGER.warning(f"Error processing charge_template topic {topic}: {e}")

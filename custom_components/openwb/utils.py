@@ -16,10 +16,6 @@ def flatten_json(y, sep='.'):
 
 
 def unflatten_path(path: str, value):
-    """
-    Wandelt einen "flachen" JSON-Pfad wie 'a/b/c' in ein verschachteltes dict um:
-    unflatten_path("a/b/c", 123) → {'a': {'b': {'c': 123}}}
-    """
     parts = path.split("/")
     result = current = {}
     for part in parts[:-1]:

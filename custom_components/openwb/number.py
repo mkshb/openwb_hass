@@ -47,7 +47,7 @@ class OpenWBChargeTemplateNumber(NumberEntity):
             from .charge_template_cache import get_template
             template = get_template(self._template_id)
             if template is None:
-                _LOGGER.warning(f"Template {self._template_id} nicht gefunden")
+                _LOGGER.warning(f"Template {self._template_id} not found")
                 return
 
             parts = self._path.split(".")
@@ -60,10 +60,10 @@ class OpenWBChargeTemplateNumber(NumberEntity):
             topic = f"{MQTT_PREFIX}/set/vehicle/template/charge_template/{self._template_id}"
             await send_mqtt_message(topic, template)
 
-            _LOGGER.debug(f"Template {self._template_id} – {self._path} auf {value} gesetzt und veröffentlicht")
+            _LOGGER.debug(f"Template {self._template_id} – {self._path} set to {value} and published")
 
         except Exception as e:
-            _LOGGER.warning(f"Fehler beim Aktualisieren von {self._path} in Template {self._template_id}: {e}")
+            _LOGGER.warning(f"Error when updating {self._path} in template {self._template_id}: {e}")
 
 async def async_setup_entry(hass, entry, async_add_entities):
     init_charge_template_entity_factory(hass, async_add_entities)
