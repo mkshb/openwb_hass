@@ -42,7 +42,7 @@ class OpenWBChargeTemplateSelector(SelectEntity):
     def __init__(self, vehicle_id: str):
         self._vehicle_id = vehicle_id
         self._attr_current_option = None
-        self._attr_name = f"Vehicle {vehicle_id} Charge Template Select"
+        self._attr_name = f"VEHICLE {vehicle_id} Charge Template Select"
         self._attr_unique_id = f"vehicle_{vehicle_id}_charge_template_select"
         self._attr_icon = "mdi:playlist-check"
         self._attr_device_info = {
