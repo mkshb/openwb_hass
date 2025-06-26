@@ -329,17 +329,16 @@ class OpenWBBaseSensor(SensorEntity):
     def __init__(self, dev_id, topic, key, initial_value, unit: str = None, icon: str = None, devtype: str = "device"):
         self._topic = topic
         self._key = key
-        self._dev_id = dev_id
+        self._dev_id = str(dev_id).lower()
         self._state = initial_value
 
-        # Gerätedaten abrufen (nur falls dev_id eine Zahl ist)
-        device_name = f"{devtype.upper()} {dev_id}"
+        # Defaultwerte
+        display_name = f"{devtype.upper()} {self._dev_id}"
         manufacturer = "openWB"
         model = "openWB Device"
 
-        if isinstance(dev_id, int) or (isinstance(dev_id, str) and dev_id.isdigit()):
-            dev_id_int = int(dev_id)
-
+        if self._dev_id.isdigit():
+            dev_id_int = int(self._dev_id)
             MQTT_TO_CONFIG_TYPE = {
                 "counter": "counter",
                 "pv": "inverter",
@@ -358,19 +357,20 @@ class OpenWBBaseSensor(SensorEntity):
 
             if info:
                 if info.get("name"):
-                    device_name = info["name"]
+                    display_name = info["name"]
                 if info.get("manufacturer"):
                     manufacturer = info["manufacturer"]
                 if info.get("model"):
                     model = info["model"]
 
-        self._attr_name = f"openWB - {device_name} - {key.replace('_', ' ').title()}"
-        self._attr_unique_id = f"openwb_{devtype.lower()}_{dev_id}_{key}"
+        self._attr_name = f"openWB - {display_name} - {key.replace('_', ' ').title()}"
+        self._attr_unique_id = f"openwb_{devtype.lower()}_{self._dev_id}_{key}"
+        self._attr_suggested_object_id = self._attr_unique_id
         self._attr_native_unit_of_measurement = unit
         self._attr_icon = icon
         self._attr_device_info = {
-            "identifiers": {(DOMAIN, f"openwb_{devtype.lower()}_{dev_id}")},
-            "name": f"openWB – {devtype.upper()} - {device_name} (ID: {dev_id})",
+            "identifiers": {(DOMAIN, f"openwb_{devtype.lower()}_{self._dev_id}")},
+            "name": f"openWB – {devtype.upper()} - {display_name} (ID: {self._dev_id})",
             "manufacturer": manufacturer,
             "model": model,
         }

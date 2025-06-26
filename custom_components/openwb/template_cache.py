@@ -1,4 +1,5 @@
 import logging
+
 _LOGGER = logging.getLogger(__name__)
 
 _charge_template_name_by_id = {}
@@ -6,6 +7,11 @@ _ev_template_name_by_id = {}
 
 def update_charge_template_name(template_id: str, name: str):
     _charge_template_name_by_id[template_id] = name
+
+    from .select import SELECT_ENTITIES
+    for selector in SELECT_ENTITIES:
+        if selector.get_template_id() == template_id:
+            selector.update_current_option_by_id(template_id)
 
 def update_ev_template_name(template_id: str, name: str):
     _ev_template_name_by_id[template_id] = name
