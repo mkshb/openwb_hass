@@ -1,6 +1,10 @@
+import asyncio
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
+from .mqtt_device_info_handler import subscribe_to_device_configs
+from .mqtt_vehicle_info_handler import subscribe_to_vehicle_info
+from .mqtt_chargepoint_info_handler import subscribe_to_chargepoint_info
 
 DOMAIN = "openwb"
 PLATFORMS = ["sensor", "select"]
@@ -9,12 +13,14 @@ async def async_setup(hass: HomeAssistant, config: ConfigType):
     return True
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-    return True
+    mqtt_client = hass.data["mqtt"].client
+    subscribe_to_vehicle_info(mqtt_client)
+    subscribe_to_device_configs(mqtt_client)
+    subscribe_to_chargepoint_info(mqtt_client)
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
-    await hass.config_entries.async_forward_entry_unload(entry, "sensor")
-    await hass.config_entries.async_forward_entry_unload(entry, "select")
+    await asyncio.sleep(2)
+
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):

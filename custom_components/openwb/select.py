@@ -8,7 +8,7 @@ from homeassistant.helpers.device_registry import async_get as async_get_device_
 from homeassistant.helpers.entity_registry import async_get as async_get_entity_registry
 from .const import DOMAIN, MQTT_PREFIX
 from .template_cache import get_all_charge_templates, get_template_id_by_name, get_charge_template_name
-
+from .vehicle_cache import get_vehicle_info
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -41,8 +41,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
 class OpenWBChargeTemplateSelector(SelectEntity):
     def __init__(self, vehicle_id: str):
         self._vehicle_id = vehicle_id
-        self._attr_current_option = None
-        self._attr_name = f"VEHICLE {vehicle_id} Charge Template Select"
+        info = get_vehicle_info(int(vehicle_id))
+        display_name = info.get("name") if info and info.get("name") else f"VEHICLE {vehicle_id}"
+
+        self._attr_name = f"openWB - {display_name} - Charge Template Select"
         self._attr_unique_id = f"vehicle_{vehicle_id}_charge_template_select"
         self._attr_icon = "mdi:playlist-check"
         self._attr_device_info = {
@@ -51,6 +53,15 @@ class OpenWBChargeTemplateSelector(SelectEntity):
             "manufacturer": "openWB",
             "model": "MQTT",
         }
+
+        info = get_vehicle_info(int(vehicle_id))
+        current_template = None
+        if info:
+            template_id = str(info.get("charge_template"))
+            _LOGGER.warning(f"Template-ID für Vorauswahl: {template_id}")
+            current_template = get_charge_template_name(template_id)
+
+        self._attr_current_option = current_template or "Template 0"
 
         SELECT_ENTITIES.append(self)
 
@@ -78,3 +89,9 @@ class OpenWBChargeTemplateSelector(SelectEntity):
         if name:
             self._attr_current_option = name
             self.async_write_ha_state()
+        else:
+            _LOGGER.debug(f"Template-Name für ID {template_id} noch nicht im Cache. Warte auf spätere Aktualisierung.")
+    
+    def get_template_id(self) -> str | None:
+        info = get_vehicle_info(int(self._vehicle_id))
+        return str(info.get("charge_template")) if info else None

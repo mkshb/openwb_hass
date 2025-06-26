@@ -51,6 +51,7 @@ These templates are displayed as human-readable text (e.g., `Fast Charge`, `Over
 - [x] Support for vehicle templates (`charge_template`, `ev_template`)
 - [x] Chargepoint configuration mapped to individual entities
 - [x] Select entities for choosing charge templates
+- [x] Device naming according to openWB configuration
 
 ### Planned:
 - [ ] Extended control of openWB via `set/` topics
@@ -73,16 +74,23 @@ To enable MQTT:
 
 Example Mosquitto Bridge Config (not openWB MQTT Bridge) to subscribe all openWB/# topics
 ```
-#################################################################
-# openWB MQTT Bridge
-#################################################################
-connection openwb-bridge
-address <openwb-ip>:1883
-clientid mosquitto-openwb-bridge
-try_private false
-cleansession true
-start_type automatic
-topic openWB/# both 2
+    #################################################################
+    # MQTT Bridge to openWB
+    #################################################################
+
+    connection openwb-bridge
+    address 10.10.10.85:1883
+    clientid mosquitto-openwb-bridge
+    try_private false
+    cleansession true
+    start_type automatic
+
+    # Optional user/password
+    # username openwbuser
+    # password geheim
+
+    topic openWB/# in 2
+    topic openWB/set/# out 2
 ```
 
 ---
@@ -162,6 +170,7 @@ Diese Vorlagen werden korrekt als lesbarer Text angezeigt (z. B. `Schnellladen
 - [x] Unterstützung für Fahrzeug-Templates (`charge_template`, `ev_template`)
 - [x] Ladepunkt-Konfiguration als Entitäten
 - [x] Select-Entitäten für Ladeprofile
+- [x] Benennung von Home Assistant Geräten nach openWB Konfiguration
 
 ### Geplant:
 - [ ] Weitere Steuerung von openWB via `set/`-Topics
@@ -184,16 +193,23 @@ So aktivieren Sie MQTT:
 
 Beispiel Mosquitto Bridge Config (nicht openWB MQTT Bridge) um alle openWB/# Topics zu abonnieren
 ```
-#################################################################
-# openWB MQTT Bridge
-#################################################################
-connection openwb-bridge
-address <openwb-ip>:1883
-clientid mosquitto-openwb-bridge
-try_private false
-cleansession true
-start_type automatic
-topic openWB/# both 2
+    #################################################################
+    # MQTT Bridge to openWB
+    #################################################################
+
+    connection openwb-bridge
+    address 10.10.10.85:1883
+    clientid mosquitto-openwb-bridge
+    try_private false
+    cleansession true
+    start_type automatic
+
+    ## Optional: Benutzer / Passwort
+    # username openwbuser
+    # password geheim
+
+    topic openWB/# in 2
+    topic openWB/set/# out 2
 ```
 
 ---

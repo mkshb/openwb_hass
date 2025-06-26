@@ -1,0 +1,37 @@
+import json
+import re
+import logging
+from .chargepoint_cache import update_chargepoint_info
+
+_LOGGER = logging.getLogger(__name__)
+
+CHARGEPOINT_INFO_TOPIC = "openWB/chargepoint/+/config"
+
+def subscribe_to_chargepoint_info(mqtt_client):
+    """Subscribe to all chargepoint configs via MQTT."""
+    mqtt_client.async_subscribe(CHARGEPOINT_INFO_TOPIC, _handle_chargepoint_config_message, 0)
+    _LOGGER.debug(f"Subscribed to: {CHARGEPOINT_INFO_TOPIC}")
+
+def _handle_chargepoint_config_message(msg):
+    """Callback for received chargepoint configs."""
+    topic = msg.topic
+    payload = msg.payload
+
+    match = re.match(r"openWB/chargepoint/(\d+)/config", topic)
+    if not match:
+        _LOGGER.debug(f"Ignoriere Topic außerhalb chargepoint config: {topic}")
+        return
+
+    chargepoint_id = int(match.group(1))
+
+    try:
+        config = json.loads(payload.decode("utf-8"))
+        name = config.get("name")
+        info = config.get("info", {}) or {}
+        model = info.get("model")
+        manufacturer = "openWB"
+
+        update_chargepoint_info(chargepoint_id, name, manufacturer, model)
+        _LOGGER.info(f"Chargepoint {chargepoint_id} info updated: {name}, {manufacturer}, {model}")
+    except Exception as e:
+        _LOGGER.warning(f"Fehler beim Verarbeiten von Chargepoint Config {topic}: {e}")
