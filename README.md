@@ -4,7 +4,7 @@ This Home Assistant custom integration seamlessly connects your openWB charging 
 
 ## 📚 Table of Contents
 
-- [openWB Home Assistant Integration - ENGLISH](#openwb-home-assistant-integration---english)
+- [ENGLISH Documentation](#openwb-home-assistant-integration---english)
   - [🔧 Features](#-features)
     - [✅ Automatic MQTT Discovery](#-automatic-mqtt-discovery)
     - [⚡ Supported Device Categories](#-supported-device-categories)
@@ -14,7 +14,7 @@ This Home Assistant custom integration seamlessly connects your openWB charging 
   - [🔗 Requirements: MQTT integration](#-requirements-mqtt-integration)
   - [🧩 Installation via HACS](#-installation-via-hacs)
 
-- [openWB Home Assistant Integration - GERMAN](#openwb-home-assistant-integration---german)
+- [GERMAN Documentation](#openwb-home-assistant-integration---german)
   - [🔧 Funktionen](#-funktionen)
     - [✅ Automatische MQTT-Erkennung](#-automatische-mqtt-erkennung)
     - [⚡ Unterstützte Gerätegruppen](#-unterstützte-gerätegruppen)
