@@ -8,7 +8,6 @@ VEHICLE_TOPIC_PATTERN = "openWB/vehicle/+/+"
 
 def subscribe_to_vehicle_info(mqtt_client):
     mqtt_client.async_subscribe(VEHICLE_TOPIC_PATTERN, _handle_vehicle_topic, 0)
-    _LOGGER.warning(f"Subscribed to: {VEHICLE_TOPIC_PATTERN}")
 
 def _handle_vehicle_topic(msg):
     topic = msg.topic
@@ -33,19 +32,19 @@ def _handle_vehicle_topic(msg):
             name = json.loads(payload.decode("utf-8"))
             if name:
                 update_vehicle_info(vehicle_id, name=name)
-                _LOGGER.info(f"Vehicle {vehicle_id} name updated to: {name}")
+                _LOGGER.debug(f"Vehicle {vehicle_id} name updated to: {name}")
 
         elif subkey == "info":
             data = json.loads(payload.decode("utf-8"))
             manufacturer = data.get("manufacturer")
             model = data.get("model")
             update_vehicle_info(vehicle_id, manufacturer=manufacturer, model=model)
-            _LOGGER.info(f"Vehicle {vehicle_id} info updated: manufacturer={manufacturer}, model={model}")
+            _LOGGER.debug(f"Vehicle {vehicle_id} info updated: manufacturer={manufacturer}, model={model}")
 
         elif subkey in ("charge_template", "ev_template", "tag_id"):
             value = json.loads(payload.decode("utf-8"))
             update_vehicle_templates(vehicle_id, subkey, value)
-            _LOGGER.info(f"Vehicle {vehicle_id} {subkey} updated: {value}")
+            _LOGGER.debug(f"Vehicle {vehicle_id} {subkey} updated: {value}")
 
         else:
             _LOGGER.debug(f"Ignoriere unbekanntes Vehicle-Subtopic: {subkey}")

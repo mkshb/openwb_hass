@@ -32,6 +32,6 @@ def _handle_chargepoint_config_message(msg):
         manufacturer = "openWB"
 
         update_chargepoint_info(chargepoint_id, name, manufacturer, model)
-        _LOGGER.info(f"Chargepoint {chargepoint_id} info updated: {name}, {manufacturer}, {model}")
+        _LOGGER.debug(f"Chargepoint {chargepoint_id} info updated: {name}, {manufacturer}, {model}")
     except Exception as e:
         _LOGGER.warning(f"Fehler beim Verarbeiten von Chargepoint Config {topic}: {e}")

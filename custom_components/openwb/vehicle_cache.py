@@ -18,7 +18,7 @@ def update_vehicle_info(vehicle_id: int | str, name: str | None = None, manufact
         info["manufacturer"] = manufacturer
     if model is not None:
         info["model"] = model
-    _LOGGER.warning(f"Updated vehicle cache: {vehicle_id} → name='{info.get('name')}', manufacturer='{info.get('manufacturer')}', model='{info.get('model')}'")
+    _LOGGER.debug(f"Updated vehicle cache: {vehicle_id} → name='{info.get('name')}', manufacturer='{info.get('manufacturer')}', model='{info.get('model')}'")
 
 def update_vehicle_templates(vehicle_id: int | str, key: str, value):
     try:
