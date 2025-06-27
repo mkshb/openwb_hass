@@ -22,7 +22,8 @@ CHARGE_TEMPLATE_CONFIG = {
             "instant_charging",
             "eco_charging",
             "pv_charging",
-            "scheduled_charging"
+            "scheduled_charging",
+            "stop"
         ]
     },
 
@@ -105,6 +106,6 @@ CHARGE_TEMPLATE_CONFIG = {
         "type": "number", "min": 0, "max": 100, "step": 1, "unit": "%"
     },
     "chargemode/instant_charging/phases_to_use": {
-        "type": "select", "options": [1, 2, 3]
+        "type": "select", "options": [1, 3]
     }
 }
