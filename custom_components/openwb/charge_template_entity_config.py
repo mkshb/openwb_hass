@@ -48,7 +48,7 @@ CHARGE_TEMPLATE_CONFIG = {
         "type": "number", "min": 0, "max": 100, "step": 1, "unit": "%"
     },
     "chargemode/eco_charging/max_price": {
-        "type": "number", "min": 0, "max": 99, "step": 1, "unit": "ct/kWh"
+        "type": "number", "min": 0.0001, "max": 0.001, "step": 0.001, "unit": "ct/kWh"
     },
     "chargemode/eco_charging/phases_to_use": {
         "type": "select", "options": [0, 1, 3]

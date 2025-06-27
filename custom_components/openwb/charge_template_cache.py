@@ -9,27 +9,32 @@ _ev_template_name_by_id = {}
 
 SELECT_ENTITIES: list = []
 NUMBER_ENTITIES: list = []
+SWITCH_ENTITIES: list = []
 
 def register_select_entity(entity):
     _LOGGER.debug("📌 SelectEntity registriert: %s (%s)", getattr(entity, "name", repr(entity)), entity.__class__.__name__)
     SELECT_ENTITIES.append(entity)
 
 def register_number_entity(entity):
-    _LOGGER.warning("📌 NumberEntity registriert: %s (%s)", getattr(entity, "name", repr(entity)), entity.__class__.__name__)
+    _LOGGER.debug("📌 NumberEntity registriert: %s (%s)", getattr(entity, "name", repr(entity)), entity.__class__.__name__)
     NUMBER_ENTITIES.append(entity)
+
+def register_switch_entity(entity):
+    _LOGGER.debug("📌 SwitchEntity registriert: %s (%s)", getattr(entity, "name", repr(entity)), entity.__class__.__name__)
+    SWITCH_ENTITIES.append(entity)    
 
 def update_charge_template(template_id: str, data: dict):
     _charge_template_data_by_id[template_id] = data
-    _LOGGER.warning("update_charge_template() aufgerufen für ID %s", template_id)
+    _LOGGER.debug("update_charge_template() aufgerufen für ID %s", template_id)
     name = data.get("name")
     if name:
         update_charge_template_name(template_id, name)
 
-    _LOGGER.warning("NUMBER_ENTITIES beim update_charge_template: %s", NUMBER_ENTITIES)
-    _LOGGER.warning("Anzahl NUMBER_ENTITIES: %d", len(NUMBER_ENTITIES))
+    #_LOGGER.debug("SWITCH_ENTITIES beim update_charge_template: %s", SWITCH_ENTITIES)
+    #_LOGGER.debug("Anzahl SWITCH_ENTITIES: %d", len(SWITCH_ENTITIES))
 
     from .select import OpenWBChargeTemplateSelector
-    from .charge_templates import ChargeTemplateNumberEntity
+    from .charge_templates import ChargeTemplateNumberEntity, ChargeTemplateSwitchEntity
     
     for entity in SELECT_ENTITIES:
         if isinstance(entity, OpenWBChargeTemplateSelector):
@@ -45,6 +50,12 @@ def update_charge_template(template_id: str, data: dict):
         if isinstance(entity, ChargeTemplateNumberEntity):
             if str(entity._template_id) == str(template_id):
                 _LOGGER.debug("🔢 Aktualisiere NumberEntity: %s", entity.name)
+                entity.update_value_from_cache()
+
+    for entity in SWITCH_ENTITIES:
+        if isinstance(entity, ChargeTemplateSwitchEntity):
+            if str(entity._template_id) == str(template_id):
+                _LOGGER.debug("🔢 Aktualisiere SwitchEntity: %s", entity.name)
                 entity.update_value_from_cache()
     
 

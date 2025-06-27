@@ -17,7 +17,7 @@ async def _handle_charge_template_topic(msg):
     topic = msg.topic
     payload = msg.payload
 
-    _LOGGER.warning("PAYLOAD ROH: %s", payload.decode("utf-8")) 
+    _LOGGER.debug("PAYLOAD ROH: %s", payload.decode("utf-8")) 
 
     try:
         if not payload.strip().startswith(b"{"):
@@ -29,7 +29,7 @@ async def _handle_charge_template_topic(msg):
         template_name = data.get("name", f"Template {template_id}")
 
         charge_template_cache.update_charge_template(template_id, data)
-        _LOGGER.warning("update_charge_template() wurde von MQTT-Handler aufgerufen")
+        _LOGGER.debug("update_charge_template() wurde von MQTT-Handler aufgerufen")
         
         flat = flatten_json(data)
         for path, value in flat.items():

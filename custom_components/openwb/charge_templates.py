@@ -6,7 +6,7 @@ from homeassistant.components.number import NumberEntity
 from homeassistant.components.text import TextEntity
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.components.select import SelectEntity
-from .charge_template_cache import get_charge_template, set_nested_value, update_charge_template, get_charge_template_name, register_select_entity, register_number_entity
+from .charge_template_cache import get_charge_template, set_nested_value, update_charge_template, get_charge_template_name, register_select_entity, register_number_entity, register_switch_entity
 from .charge_template_entity_config import CHARGE_TEMPLATE_CONFIG
 from .const import DOMAIN
 
@@ -211,11 +211,11 @@ class ChargeTemplateNumberEntity(ChargeTemplateBase, NumberEntity):
                 break
     
         if value is not None and value != self._attr_native_value:
-            _LOGGER.warning("🔢 Update %s: %s -> %s", self._attr_name, self._attr_native_value, value)
+            _LOGGER.debug("🔢 Update %s: %s -> %s", self._attr_name, self._attr_native_value, value)
             self._attr_native_value = value
             self.async_write_ha_state()
         else:
-            _LOGGER.warning("🔢 Kein Update nötig: %s bleibt bei %s", self._attr_name, self._attr_native_value)
+            _LOGGER.debug("🔢 Kein Update nötig: %s bleibt bei %s", self._attr_name, self._attr_native_value)
     
 class ChargeTemplateSwitchEntity(ChargeTemplateBase, SwitchEntity):
     def __init__(self, hass, template_id, path, value, name, unique_id):
@@ -238,6 +238,26 @@ class ChargeTemplateSwitchEntity(ChargeTemplateBase, SwitchEntity):
         await self._update_and_publish(False)
         self._attr_is_on = False
         self.async_write_ha_state()
+
+    def update_value_from_cache(self):
+        from .charge_template_cache import get_charge_template
+    
+        template = get_charge_template(self._template_id)
+        value = template
+        for key in self._path.split("."):
+            if isinstance(value, dict):
+                value = value.get(key)
+            else:
+                value = None
+                break
+    
+        if isinstance(value, bool) and value != self._attr_is_on:
+            _LOGGER.warning("🔢 Update Switch %s: %s -> %s", self._attr_name, self._attr_is_on, value)
+            self._attr_is_on = value
+            self.async_write_ha_state()
+        else:
+            _LOGGER.debug("🔢 Kein Update nötig für %s: bleibt bei %s", self._attr_name, self._attr_is_on)
+    
 
 def create_editable_entity(template_id: str, path: str, value):
     if _hass is None or _async_add_entities is None:
@@ -263,6 +283,7 @@ def create_editable_entity(template_id: str, path: str, value):
         return
     elif entity_type == "switch":
         entity = ChargeTemplateSwitchEntity(_hass, template_id, path, value, friendly_name, unique_id)
+        register_switch_entity(entity)
     elif entity_type == "number":
         entity = ChargeTemplateNumberEntity(_hass, template_id, path, value, friendly_name, unique_id, config)
         register_number_entity(entity)
