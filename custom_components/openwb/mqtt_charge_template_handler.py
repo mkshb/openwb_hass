@@ -21,10 +21,11 @@ async def _handle_charge_template_topic(msg):
 
     try:
         if not payload.strip().startswith(b"{"):
-            _LOGGER.warning(f"Ignore incomplete charge_template Topic: {topic}")
+            _LOGGER.debug(f"Ignore incomplete charge_template Topic: {topic}")
             return
 
         data = json.loads(payload.decode("utf-8"))
+        _LOGGER.debug("MQTT received payload:\n%s", json.dumps(data, indent=2))
         template_id = str(data.get("id"))
         template_name = data.get("name", f"Template {template_id}")
 

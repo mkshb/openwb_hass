@@ -1,4 +1,6 @@
 import logging
+import asyncio
+
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -36,6 +38,7 @@ class ChargeTemplateSwitchEntity(SwitchEntity):
         from . import charge_template_cache
         from . import utils
 
+        await asyncio.sleep(0.1)
         template = charge_template_cache.get_template(self._template_id)
         if not template:
             _LOGGER.warning("Template %s not found", self._template_id)

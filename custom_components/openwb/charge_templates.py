@@ -1,5 +1,6 @@
 import logging
 import json
+import asyncio
 
 from homeassistant.core import HomeAssistant
 from homeassistant.components.number import NumberEntity
@@ -130,6 +131,7 @@ class ChargeTemplateSelectEntity(SelectEntity):
  
         from .charge_template_cache import get_charge_template, update_charge_template, set_nested_value
 
+        await asyncio.sleep(0.1)
         template = get_charge_template(self._template_id)
         if not template:
             _LOGGER.warning("Template %s not found", self._template_id)
@@ -252,7 +254,7 @@ class ChargeTemplateSwitchEntity(ChargeTemplateBase, SwitchEntity):
                 break
     
         if isinstance(value, bool) and value != self._attr_is_on:
-            _LOGGER.warning("🔢 Update Switch %s: %s -> %s", self._attr_name, self._attr_is_on, value)
+            _LOGGER.debug("🔢 Update Switch %s: %s -> %s", self._attr_name, self._attr_is_on, value)
             self._attr_is_on = value
             self.async_write_ha_state()
         else:

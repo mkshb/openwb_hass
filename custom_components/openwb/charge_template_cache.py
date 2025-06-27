@@ -1,9 +1,10 @@
 import logging
 from pprint import pformat
+import json
 
 _LOGGER = logging.getLogger(__name__)
 
-# Vollständige JSONs der Templates
+
 _charge_template_data_by_id = {}
 _ev_template_name_by_id = {}
 
@@ -25,7 +26,7 @@ def register_switch_entity(entity):
 
 def update_charge_template(template_id: str, data: dict):
     _charge_template_data_by_id[template_id] = data
-    _LOGGER.debug("update_charge_template() aufgerufen für ID %s", template_id)
+    _LOGGER.debug("New data for template %s:\n%s", template_id, json.dumps(data, indent=2))
     name = data.get("name")
     if name:
         update_charge_template_name(template_id, name)
