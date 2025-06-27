@@ -8,12 +8,10 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.device_registry import async_get as async_get_device_registry
 from homeassistant.helpers.entity_registry import async_get as async_get_entity_registry
 from .const import DOMAIN, MQTT_PREFIX
-from .template_cache import get_all_charge_templates, get_template_id_by_name, get_charge_template_name
+from .charge_template_cache import get_all_charge_templates, get_template_id_by_name, get_charge_template_name, register_select_entity
 from .vehicle_cache import get_vehicle_info
 
 _LOGGER = logging.getLogger(__name__)
-
-SELECT_ENTITIES: list["OpenWBChargeTemplateSelector"] = []
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
     from .charge_template_entity_config import CHARGE_TEMPLATE_CONFIG
@@ -76,7 +74,7 @@ class OpenWBChargeTemplateSelector(SelectEntity):
 
         self._attr_current_option = current_template or "Template 0"
 
-        SELECT_ENTITIES.append(self)
+        register_select_entity(self)
 
     @property
     def options(self):

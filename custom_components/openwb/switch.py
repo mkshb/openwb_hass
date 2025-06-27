@@ -5,6 +5,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .charge_templates import drain_entity_queue_by_type, init_charge_template_entity_factory
+from .charge_template_cache import register_switch_entity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -18,6 +19,8 @@ class ChargeTemplateSwitchEntity(SwitchEntity):
         self._attr_icon = "mdi:toggle-switch"
         self._attr_should_poll = False
         self._attr_is_on = bool(value)
+
+        register_switch_entity(self)
 
     @property
     def is_on(self) -> bool:
@@ -59,6 +62,24 @@ class ChargeTemplateSwitchEntity(SwitchEntity):
 
         self._attr_is_on = state
         self.async_write_ha_state()
+
+    def update_value_from_cache(self):
+        from .charge_template_cache import get_template
+    
+        template = get_template(self._template_id)
+        value = template
+        for key in self._path.split("."):
+            if isinstance(value, dict):
+                value = value.get(key)
+            else:
+                value = None
+                break
+    
+        if isinstance(value, bool) and value != self._attr_is_on:
+            _LOGGER.warning("🔄 Update Switch %s: %s -> %s", self.name, self._attr_is_on, value)
+            self._attr_is_on = value
+            self.async_write_ha_state()
+        
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
     from .charge_template_entity_config import CHARGE_TEMPLATE_CONFIG
