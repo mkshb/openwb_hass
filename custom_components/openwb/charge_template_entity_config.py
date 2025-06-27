@@ -68,7 +68,7 @@ CHARGE_TEMPLATE_CONFIG = {
         "type": "select", "options": ["none", "amount", "soc"]
     },
     "chargemode/pv_charging/limit/amount": {
-        "type": "number", "min": 0, "max": 100, "step": 1, "unit": "kWh"
+        "type": "number", "min": 0, "max": 100000, "step": 1000, "unit": "Wh"
     },
     "chargemode/pv_charging/limit/soc": {
         "type": "number", "min": 0, "max": 100, "step": 1, "unit": "%"
@@ -100,7 +100,7 @@ CHARGE_TEMPLATE_CONFIG = {
         "type": "select", "options": ["none", "amount", "soc"]
     },
     "chargemode/instant_charging/limit/amount": {
-        "type": "number", "min": 0, "max": 100, "step": 1, "unit": "kWh"
+        "type": "number", "min": 0, "max": 100000, "step": 1000, "unit": "Wh"
     },
     "chargemode/instant_charging/limit/soc": {
         "type": "number", "min": 0, "max": 100, "step": 1, "unit": "%"

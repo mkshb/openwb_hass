@@ -9,6 +9,7 @@ from .charge_template_cache import update_charge_template
 from .charge_template_entity_config import CHARGE_TEMPLATE_CONFIG
 from .mqtt import send_mqtt_message
 from .charge_templates import drain_entity_queue_by_type, init_charge_template_entity_factory
+from .charge_template_cache import register_number_entity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -32,6 +33,8 @@ class OpenWBChargeTemplateNumber(NumberEntity):
         self._attr_native_unit_of_measurement = self._unit
         self._attr_icon = self._icon
         self._attr_should_poll = False
+
+        register_number_entity(self)
 
     @property
     def native_value(self):
@@ -64,6 +67,23 @@ class OpenWBChargeTemplateNumber(NumberEntity):
 
         except Exception as e:
             _LOGGER.warning(f"Error when updating {self._path} in template {self._template_id}: {e}")
+    
+    def update_value_from_cache(self):
+        from .charge_template_cache import get_charge_template
+
+        template = get_charge_template(self._template_id)
+        value = template
+        for key in self._path.split("."):
+            if isinstance(value, dict):
+                value = value.get(key)
+            else:
+                value = None
+                break
+
+        if value is not None and float(value) != self._state:
+            _LOGGER.debug("🔄 Update Number %s: %s -> %s", self._attr_name, self._state, value)
+            self._state = float(value)
+            self.async_write_ha_state()
 
 async def async_setup_entry(hass, entry, async_add_entities):
     init_charge_template_entity_factory(hass, async_add_entities)

@@ -13,7 +13,6 @@ from .charge_template_cache import (
     get_charge_template_name,
     get_ev_template_name,
 )
-from .select import SELECT_ENTITIES
 from .device_cache import get_device_info
 from .vehicle_cache import get_vehicle_info
 from .chargepoint_cache import get_chargepoint_info
@@ -227,8 +226,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
                     sensors[unique_id].update_state(template_name)
             
                 # Update selectors
-                for selector in SELECT_ENTITIES:
-                    if selector._vehicle_id == str(dev_id):
+                import custom_components.openwb.charge_template_cache as charge_template_cache
+
+                for selector in charge_template_cache.SELECT_ENTITIES:
+                    if hasattr(selector, "_vehicle_id") and selector._vehicle_id == str(dev_id):
                         selector.update_current_option_by_id(template_id)
                 return
 
