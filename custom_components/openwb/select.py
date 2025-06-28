@@ -31,22 +31,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_e
     entity_registry = async_get_entity_registry(hass)
     entities = []
 
-    for device in device_registry.devices.values():
-        related_entities = [
-            e for e in entity_registry.entities.values()
-            if e.device_id == device.id and e.domain == "sensor"
-        ]
-        if not related_entities:
-            continue
-    
-        for ident in device.identifiers:
-            if not isinstance(ident, tuple) or len(ident) != 2:
-                continue
-            domain, ident_str = ident
-            if domain == DOMAIN and ident_str.startswith("openwb_vehicle_"):
-                vehicle_id = ident_str.rsplit("_", 1)[-1]
-                entities.append(OpenWBChargeTemplateSelector(vehicle_id))
-
     async_add_entities(entities)
 
 class OpenWBChargeTemplateSelector(SelectEntity):
