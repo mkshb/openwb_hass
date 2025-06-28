@@ -3,7 +3,7 @@ import logging
 from homeassistant.components.number import NumberEntity
 from homeassistant.components.text import TextEntity
 from homeassistant.components.switch import SwitchEntity
-from .charge_template_cache import get_charge_template, set_nested_value, update_charge_template
+from ..cache.cache_charge_template import get_charge_template, set_nested_value, update_charge_template
 
 _LOGGER = logging.getLogger(__name__)
 

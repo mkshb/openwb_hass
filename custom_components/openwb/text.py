@@ -4,7 +4,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .charge_templates import drain_entity_queue_by_type, init_charge_template_entity_factory
+from .charge_templates.entity_factory import drain_entity_queue_by_type, init_charge_template_entity_factory
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -26,16 +26,16 @@ class ChargeTemplateTextEntity(TextEntity):
 
     async def async_set_value(self, value: str) -> None:
         # Lazy Import, um Zirkularitätsprobleme zu vermeiden
-        from . import charge_template_cache
+        from . import cache_template
         from . import utils
 
-        template = charge_template_cache.get_template(self._template_id)
+        template = cache_template.get_template(self._template_id)
         if not template:
             _LOGGER.warning("Template %s not found", self._template_id)
             return
 
         utils.set_nested_value(template, self._path, value)
-        charge_template_cache.update_charge_template(self._template_id, template)
+        cache_template.update_charge_template(self._template_id, template)
 
         topic = f"openWB/set/vehicle/template/charge_template/{self._template_id}"
         import json
@@ -57,8 +57,8 @@ class ChargeTemplateTextEntity(TextEntity):
         self.async_write_ha_state()
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
-    from .charge_template_entity_config import CHARGE_TEMPLATE_CONFIG
-    from .charge_templates import create_editable_entity
+    from .charge_templates.entity_config import CHARGE_TEMPLATE_CONFIG
+    from .charge_templates.entity_factory import create_editable_entity
 
     init_charge_template_entity_factory(hass, async_add_entities)
 

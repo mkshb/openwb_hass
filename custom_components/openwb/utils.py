@@ -24,3 +24,22 @@ def unflatten_path(path: str, value):
     current[parts[-1]] = value
     return result
 
+def update_entity_name_from_cache(entity, devtype, dev_id, key, get_info_fn):
+
+    if not hasattr(entity, "_attr_name") or not hasattr(entity, "_key"):
+        return
+
+    try:
+        info = get_info_fn(int(dev_id))
+        if not info:
+            return
+
+        display_name = info.get("name") or f"{devtype.upper()} {dev_id}"
+        entity._attr_name = f"openWB – {display_name} – {key.replace('_', ' ').title()}"
+
+        import logging
+        logging.getLogger(__name__).info(f"Displayname: {display_name}")
+
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).info(f"update_entity_name_from_cache failed: {e}")

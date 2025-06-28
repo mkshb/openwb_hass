@@ -8,14 +8,14 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.device_registry import async_get as async_get_device_registry
 from homeassistant.helpers.entity_registry import async_get as async_get_entity_registry
 from .const import DOMAIN, MQTT_PREFIX
-from .charge_template_cache import get_all_charge_templates, get_template_id_by_name, get_charge_template_name, register_select_entity
-from .vehicle_cache import get_vehicle_info
+from .cache.cache_template import get_all_charge_templates, get_template_id_by_name, get_charge_template_name, register_select_entity
+from .cache.cache_vehicle import get_vehicle_info
 
 _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
-    from .charge_template_entity_config import CHARGE_TEMPLATE_CONFIG
-    from .charge_templates import create_editable_entity, drain_entity_queue_by_type, init_charge_template_entity_factory
+    from .charge_templates.entity_config import CHARGE_TEMPLATE_CONFIG
+    from .charge_templates.entity_factory import create_editable_entity, drain_entity_queue_by_type, init_charge_template_entity_factory
     # Initialisiere Factory für generische charge_template-Entitäten
     init_charge_template_entity_factory(hass, async_add_entities)
 

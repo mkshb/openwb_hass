@@ -2,11 +2,10 @@ import asyncio
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
-from .mqtt_device_info_handler import subscribe_to_device_configs
-from .mqtt_vehicle_info_handler import subscribe_to_vehicle_info
-from .mqtt_chargepoint_info_handler import subscribe_to_chargepoint_info
-from .mqtt_charge_template_handler import subscribe_to_charge_templates
-
+from .mqtt.mqtt_device_handler import subscribe_to_device_configs
+from .mqtt.mqtt_chargepoint_handler import subscribe_to_chargepoint_info
+from .mqtt.mqtt_charge_template_handler import subscribe_to_charge_templates
+from .mqtt.mqtt_vehicle_handler import subscribe_to_vehicle_info
 
 
 DOMAIN = "openwb"
@@ -17,10 +16,12 @@ async def async_setup(hass: HomeAssistant, config: ConfigType):
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     mqtt_client = hass.data["mqtt"].client
-    subscribe_to_vehicle_info(mqtt_client)
     subscribe_to_device_configs(mqtt_client)
     subscribe_to_chargepoint_info(mqtt_client)
     subscribe_to_charge_templates(mqtt_client)
+    #await subscribe_to_vehicle_info(hass)
+    
+    
 
     await asyncio.sleep(2)
 

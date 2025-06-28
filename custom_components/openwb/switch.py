@@ -6,8 +6,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .charge_templates import drain_entity_queue_by_type, init_charge_template_entity_factory
-from .charge_template_cache import register_switch_entity
+from .charge_templates.entity_factory import drain_entity_queue_by_type, init_charge_template_entity_factory
+from .cache.cache_template import register_switch_entity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -35,17 +35,17 @@ class ChargeTemplateSwitchEntity(SwitchEntity):
         await self._update_state(False)
 
     async def _update_state(self, state: bool):
-        from . import charge_template_cache
+        from . import cache_template
         from . import utils
 
         await asyncio.sleep(0.1)
-        template = charge_template_cache.get_template(self._template_id)
+        template = cache_template.get_template(self._template_id)
         if not template:
             _LOGGER.warning("Template %s not found", self._template_id)
             return
 
         utils.set_nested_value(template, self._path, state)
-        charge_template_cache.update_charge_template(self._template_id, template)
+        cache_template.update_charge_template(self._template_id, template)
 
         import json
         topic = f"openWB/set/vehicle/template/charge_template/{self._template_id}"
@@ -67,7 +67,7 @@ class ChargeTemplateSwitchEntity(SwitchEntity):
         self.async_write_ha_state()
 
     def update_value_from_cache(self):
-        from .charge_template_cache import get_template
+        from .cache_template import get_template
     
         template = get_template(self._template_id)
         value = template
@@ -85,8 +85,8 @@ class ChargeTemplateSwitchEntity(SwitchEntity):
         
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
-    from .charge_template_entity_config import CHARGE_TEMPLATE_CONFIG
-    from .charge_templates import create_editable_entity
+    from .charge_templates.entity_config import CHARGE_TEMPLATE_CONFIG
+    from .charge_templates.entity_factory import create_editable_entity
 
     init_charge_template_entity_factory(hass, async_add_entities)
 

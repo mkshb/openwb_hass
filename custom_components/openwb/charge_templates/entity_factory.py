@@ -7,9 +7,17 @@ from homeassistant.components.number import NumberEntity
 from homeassistant.components.text import TextEntity
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.components.select import SelectEntity
-from .charge_template_cache import get_charge_template, set_nested_value, update_charge_template, get_charge_template_name, register_select_entity, register_number_entity, register_switch_entity
-from .charge_template_entity_config import CHARGE_TEMPLATE_CONFIG
-from .const import DOMAIN
+from ..cache.cache_charge_template import (
+    get_charge_template,
+    set_nested_value,
+    update_charge_template,
+    get_charge_template_name,
+    register_select_entity,
+    register_number_entity,
+    register_switch_entity,
+)
+from .entity_config import CHARGE_TEMPLATE_CONFIG
+from ..const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -105,7 +113,7 @@ class ChargeTemplateSelectEntity(SelectEntity):
         return self._template_id
 
     def update_value_from_cache(self):
-        from .charge_template_cache import get_charge_template
+        from ..cache.cache_charge_template import get_charge_template
 
         # Lese verschachtelten Wert neu aus dem Cache
         template = get_charge_template(self._template_id)
@@ -129,7 +137,7 @@ class ChargeTemplateSelectEntity(SelectEntity):
             _LOGGER.warning("Ungültige Option '%s' für %s", option, self._attr_name)
             return
  
-        from .charge_template_cache import get_charge_template, update_charge_template, set_nested_value
+        from ..cache.cache_charge_template import get_charge_template, update_charge_template, set_nested_value
 
         await asyncio.sleep(0.1)
         template = get_charge_template(self._template_id)
@@ -201,7 +209,7 @@ class ChargeTemplateNumberEntity(ChargeTemplateBase, NumberEntity):
         self.async_write_ha_state()
 
     def update_value_from_cache(self):
-        from .charge_template_cache import get_charge_template
+        from ..cache.cache_charge_template import get_charge_template
     
         template = get_charge_template(self._template_id)
         value = template
@@ -211,7 +219,7 @@ class ChargeTemplateNumberEntity(ChargeTemplateBase, NumberEntity):
             else:
                 value = None
                 break
-    
+
         if value is not None and value != self._attr_native_value:
             _LOGGER.debug("🔢 Update %s: %s -> %s", self._attr_name, self._attr_native_value, value)
             self._attr_native_value = value
@@ -242,7 +250,7 @@ class ChargeTemplateSwitchEntity(ChargeTemplateBase, SwitchEntity):
         self.async_write_ha_state()
 
     def update_value_from_cache(self):
-        from .charge_template_cache import get_charge_template
+        from ..cache.cache_charge_template import get_charge_template
     
         template = get_charge_template(self._template_id)
         value = template
@@ -252,7 +260,7 @@ class ChargeTemplateSwitchEntity(ChargeTemplateBase, SwitchEntity):
             else:
                 value = None
                 break
-    
+
         if isinstance(value, bool) and value != self._attr_is_on:
             _LOGGER.debug("🔢 Update Switch %s: %s -> %s", self._attr_name, self._attr_is_on, value)
             self._attr_is_on = value

@@ -5,11 +5,11 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN, MQTT_PREFIX
-from .charge_template_cache import update_charge_template
-from .charge_template_entity_config import CHARGE_TEMPLATE_CONFIG
-from .mqtt import send_mqtt_message
-from .charge_templates import drain_entity_queue_by_type, init_charge_template_entity_factory
-from .charge_template_cache import register_number_entity
+from .cache.cache_charge_template import update_charge_template
+from .charge_templates.entity_config import CHARGE_TEMPLATE_CONFIG
+from .mqtt.mqtt_utils import send_mqtt_message
+from .charge_templates.entity_factory import drain_entity_queue_by_type, init_charge_template_entity_factory
+from .cache.cache_charge_template import register_number_entity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -47,7 +47,7 @@ class OpenWBChargeTemplateNumber(NumberEntity):
 
     async def _update_template_value(self, value):
         try:
-            from .charge_template_cache import get_template
+            from .cache.cache_charge_template import get_template
             template = get_template(self._template_id)
             if template is None:
                 _LOGGER.warning(f"Template {self._template_id} not found")
@@ -69,7 +69,7 @@ class OpenWBChargeTemplateNumber(NumberEntity):
             _LOGGER.warning(f"Error when updating {self._path} in template {self._template_id}: {e}")
     
     def update_value_from_cache(self):
-        from .charge_template_cache import get_charge_template
+        from .cache.cache_charge_template import get_charge_template
 
         template = get_charge_template(self._template_id)
         value = template
@@ -92,12 +92,12 @@ async def async_setup_entry(hass, entry, async_add_entities):
     entities = []
     for template_id, path, value in drain_entity_queue_by_type("number"):
         # Filter anhand deiner Plattform
-        from .charge_template_entity_config import CHARGE_TEMPLATE_CONFIG
+        from .charge_templates.entity_config import CHARGE_TEMPLATE_CONFIG
         config_key = path.replace(".", "/")
         entity_type = CHARGE_TEMPLATE_CONFIG.get(config_key, {}).get("type")
 
         if entity_type == "number":  # <- Datei für number.py
-            from .charge_templates import create_editable_entity
+            from .charge_templates.entity_factory import create_editable_entity
             create_editable_entity(template_id, path, value)
 
     return True
