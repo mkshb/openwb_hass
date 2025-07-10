@@ -24,6 +24,8 @@ This Home Assistant custom integration seamlessly connects your openWB charging 
   - [🛣️ Roadmap](#️-roadmap-1)
   - [🔗 Anforderungen: MQTT-Integration](#-anforderungen-mqtt-integration)
   - [🧩 Installation über HACS](#-installation-über-hacs)
+  - [🔧 Charging Template - HASS YAML Generator ](#home-assistant-yaml-generator-1 )
+
 - [📸 Screenshots](#-screenshots)
 
 ---
