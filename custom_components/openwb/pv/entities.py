@@ -5,7 +5,6 @@ from ..cache.cache_device import get_device_info
 
 _LOGGER = logging.getLogger(__name__)
 
-
 class OpenWBPVSensor(SensorEntity):
     def __init__(self, dev_id, topic, key, pretty_name, initial_value, unit=None, icon=None, devtype="pv"):
         self._topic = topic
