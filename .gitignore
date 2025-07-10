@@ -5,5 +5,4 @@
 !config/openwb.png
 !config/hacs.json
 !config/custom_components/openwb/*
-!yamlgenerator/
-!yamlgenerator/*
+!config/custom_components/openwb/yamlgenerator/*
