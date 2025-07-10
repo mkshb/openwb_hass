@@ -13,15 +13,15 @@ NUMBER_ENTITIES: list = []
 SWITCH_ENTITIES: list = []
 
 def register_select_entity(entity):
-    _LOGGER.debug("📌 SelectEntity registriert: %s (%s)", getattr(entity, "name", repr(entity)), entity.__class__.__name__)
+    _LOGGER.debug("SelectEntity registriert: %s (%s)", getattr(entity, "name", repr(entity)), entity.__class__.__name__)
     SELECT_ENTITIES.append(entity)
 
 def register_number_entity(entity):
-    _LOGGER.debug("📌 NumberEntity registriert: %s (%s)", getattr(entity, "name", repr(entity)), entity.__class__.__name__)
+    _LOGGER.debug("NumberEntity registriert: %s (%s)", getattr(entity, "name", repr(entity)), entity.__class__.__name__)
     NUMBER_ENTITIES.append(entity)
 
 def register_switch_entity(entity):
-    _LOGGER.debug("📌 SwitchEntity registriert: %s (%s)", getattr(entity, "name", repr(entity)), entity.__class__.__name__)
+    _LOGGER.debug("SwitchEntity registriert: %s (%s)", getattr(entity, "name", repr(entity)), entity.__class__.__name__)
     SWITCH_ENTITIES.append(entity)    
 
 def update_charge_template(template_id: str, data: dict):
@@ -34,8 +34,8 @@ def update_charge_template(template_id: str, data: dict):
     #_LOGGER.debug("SWITCH_ENTITIES beim update_charge_template: %s", SWITCH_ENTITIES)
     #_LOGGER.debug("Anzahl SWITCH_ENTITIES: %d", len(SWITCH_ENTITIES))
 
-    from .select import OpenWBChargeTemplateSelector
-    from .charge_templates import ChargeTemplateNumberEntity, ChargeTemplateSwitchEntity
+    from ..select import OpenWBChargeTemplateSelector
+    from ..charge_templates.entity_factory import ChargeTemplateNumberEntity, ChargeTemplateSwitchEntity
     
     for entity in SELECT_ENTITIES:
         if isinstance(entity, OpenWBChargeTemplateSelector):

@@ -1,8 +1,9 @@
 import json
 import logging
-import custom_components.openwb.charge_template_cache as charge_template_cache
-from .utils import flatten_json
-from .charge_templates import queue_entity, CHARGE_TEMPLATE_CONFIG
+import custom_components.openwb.cache.cache_charge_template as cache_charge_template
+from custom_components.openwb.cache.cache_charge_template import get_registered_entities
+from ..utils import flatten_json
+from ..charge_templates.entity_factory import queue_entity, CHARGE_TEMPLATE_CONFIG
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -29,7 +30,7 @@ async def _handle_charge_template_topic(msg):
         template_id = str(data.get("id"))
         template_name = data.get("name", f"Template {template_id}")
 
-        charge_template_cache.update_charge_template(template_id, data)
+        cache_charge_template.update_charge_template(template_id, data)
         _LOGGER.debug("update_charge_template() wurde von MQTT-Handler aufgerufen")
         
         flat = flatten_json(data)
@@ -45,3 +46,10 @@ async def _handle_charge_template_topic(msg):
 
     except Exception as e:
         _LOGGER.warning(f"Error processing charge_template topic {topic}: {e}")
+
+    for entity in get_registered_entities():
+        if hasattr(entity, "update_value_from_cache"):
+            try:
+                entity.update_value_from_cache()
+            except Exception as e:
+                _LOGGER.warning(f"⚠️ Fehler beim Aktualisieren von {entity.entity_id}: {e}")

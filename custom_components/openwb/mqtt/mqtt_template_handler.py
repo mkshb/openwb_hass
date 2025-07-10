@@ -1,7 +1,7 @@
 import json
 import re
 import logging
-from .chargepoint_cache import update_chargepoint_info
+from ..cache.cache_chargepoint import update_chargepoint_info
 
 _LOGGER = logging.getLogger(__name__)
 
