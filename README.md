@@ -13,6 +13,7 @@ This Home Assistant custom integration seamlessly connects your openWB charging 
   - [🛣️ Roadmap](#️-roadmap)
   - [🔗 Requirements: MQTT integration](#-requirements-mqtt-integration)
   - [🧩 Installation via HACS](#-installation-via-hacs)
+  - [🔧 Charging Template - HASS YAML Generator ](#home-assistant-yaml-generator)
 
 - [GERMAN Documentation](#openwb-home-assistant-integration---german)
   - [🔧 Funktionen](#-funktionen)
@@ -23,6 +24,8 @@ This Home Assistant custom integration seamlessly connects your openWB charging 
   - [🛣️ Roadmap](#️-roadmap-1)
   - [🔗 Anforderungen: MQTT-Integration](#-anforderungen-mqtt-integration)
   - [🧩 Installation über HACS](#-installation-über-hacs)
+  - [🔧 Charging Template - HASS YAML Generator ](#home-assistant-yaml-generator-1 )
+
 - [📸 Screenshots](#-screenshots)
 
 ---
@@ -117,8 +120,6 @@ Example Mosquitto Bridge Config (not openWB MQTT Bridge) to subscribe all openWB
     topic openWB/set/# out 2
 ```
 
----
-
 ## 🧩 Installation via HACS
 
 This integration can be installed and updated easily using [HACS](https://hacs.xyz/):
@@ -143,6 +144,28 @@ This integration can be installed and updated easily using [HACS](https://hacs.x
 8. Go to **Settings → Devices & Services → Add Integration**, search for **„openWB“** and follow the setup wizard.
 
 ---
+
+## Home Assistant YAML Generator
+
+Easy generating Home Assistant dashboard elements
+
+📥 [Download index.html](./yamlgenerator/index.html)
+
+→ Download file
+ → Open in local browser
+ → Enter ID and the name of the loading profile
+ → Click “Generate”
+  
+→ Insert in Home Assistant via 
+ → Edit dashboard
+ → In a section: Edit
+ → Click on the three dots at the top right
+ → Edit in YAML
+ → Insert code from the generator (replacing everything)
+
+---
+---
+
 # openWB Home Assistant Integration - GERMAN
 
 Diese Home Assistant Custom Integration bindet eine openWB-Ladestation über MQTT nahtlos in dein Smart Home ein. Sie liest automatisch alle relevanten MQTT-Daten aus und erstellt daraus passende Sensoren – inklusive Wallbox-, Fahrzeug-, Batterie- und PV-Daten.
@@ -263,8 +286,30 @@ Diese Integration kann ganz einfach über [HACS](https://hacs.xyz/) installiert 
 8. Gehe zu **Einstellungen → Geräte & Dienste → Integration hinzufügen**, suche nach **„openWB“** und folge dem Einrichtungsassistenten.
 ---
 
+## Home Assistant YAML Generator
+
+Einfaches Generieren von Home Assistant Dashboard-Elementen.
+
+📥 [Download index.html](./yamlgenerator/index.html)
+
+→ Datei herunterladen
+  → Im lokalen Browser öffen
+  → ID und den Namen des Ladeprofils eingeben
+  → „Generieren“ klicken
+
+→ Einfügen in Home Assistant über 
+  → Dashboard bearbeiten
+  → In einem Abschnitt: Bearbeiten
+  → Klick auf die drei Punkte oben rechts
+  → In YAML bearbeiten
+  → Code aus dem Generator einfügen (dabei alles ersetzen)
+
+
+---
+
 # Screenshots
 
+![Charging Template HASS Dashboard](custom_components/openwb/images/chargingtemplatedashboard.png)
 ![Overview Entities](custom_components/openwb/images/overview-entities.png)
 ![Example Entities](custom_components/openwb/images/example-entities.png)
 ![Change Charging Template](custom_components/openwb/images/change-charging-template.png)

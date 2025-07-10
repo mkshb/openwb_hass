@@ -1,10 +1,13 @@
 {
   "domain": "openwb",
   "name": "openWB",
-  "version": "0.1",
+  "version": "0.8.3",
   "config_flow": true,
-  "documentation": "https://https://github.com/mkshb/openwb_hass",
+  "documentation": "https://github.com/mkshb/openwb_hass",
   "requirements": [],
   "dependencies": ["mqtt"],
-  "codeowners": ["@mkshb"]
+  "codeowners": ["@mkshb"],
+    "branding": {
+    "logo": "icon.png"
+  }
 }
