@@ -1,14 +1,13 @@
+# Ignoriere alles
 *
 
-# explizit erlaubte Dateien
-!config/.gitignore
-!config/README.md
-!config/openwb.png
-!config/hacs.json
+# explizit erlaubte Dateien im Root
+!.gitignore
+!README.md
+!openwb.png
+!hacs.json
 
-# openwb-Verzeichnis + Unterverzeichnisse erlauben
-!config/custom_components/openwb/
-!config/custom_components/openwb/*
-!config/custom_components/openwb/**/*
-!config/custom_components/openwb/yamlgenerator/
-!config/custom_components/openwb/yamlgenerator/**
+# Erlaube das komplette openwb-Verzeichnis unter custom_components
+!custom_components/
+!custom_components/openwb/
+!custom_components/openwb/**
