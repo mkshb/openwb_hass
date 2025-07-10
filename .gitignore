@@ -1,7 +1,0 @@
-
-
-!config/.gitignore
-!config/README.md
-!config/openwb.png
-!config/hacs.json
-!config/custom_components/openwb/*
