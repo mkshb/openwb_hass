@@ -1,0 +1,14 @@
+*
+
+# explizit erlaubte Dateien
+!config/.gitignore
+!config/README.md
+!config/openwb.png
+!config/hacs.json
+
+# openwb-Verzeichnis + Unterverzeichnisse erlauben
+!config/custom_components/openwb/
+!config/custom_components/openwb/*
+!config/custom_components/openwb/**/*
+!config/custom_components/openwb/yamlgenerator/
+!config/custom_components/openwb/yamlgenerator/**
