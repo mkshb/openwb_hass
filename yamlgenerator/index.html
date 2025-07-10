@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>openWB YAML Generator</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    textarea { width: 100%; height: 300px; margin-top: 1em; }
+    input, button { margin: 0.5em 0; font-size: 1em; }
+  </style>
+</head>
+<body>
+  <h1>openWB YAML Generator</h1>
+  <label>Template ID: <input type="text" id="templateId" /></label><br>
+  <label>Template Name: <input type="text" id="templateName" /></label><br>
+  <button onclick="generate()">Generieren</button>
+  <textarea id="output" readonly></textarea>
+
+  <script>
+    function generate() {
+      const id = document.getElementById("templateId").value;
+      const name = document.getElementById("templateName").value;
+      const yaml = `
+- type: custom:decluttering-card
+  template: charging_template
+  variables:
+    templateId: ${id}
+    templateName: ${name}
+`.trim();
+      document.getElementById("output").value = yaml;
+    }
+  </script>
+</body>
+</html>
