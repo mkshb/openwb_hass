@@ -18,15 +18,2164 @@
 
   <script>
     function generate() {
-      const id = document.getElementById("templateId").value;
-      const name = document.getElementById("templateName").value;
+      const id = document.getElementById("templateId").value.trim();
+      const name = document.getElementById("templateName").value.trim();
+
+      if (!id || !name) {
+        alert("Bitte beide Felder ausfüllen.");
+        return;
+      }
+
       const yaml = `
-- type: custom:decluttering-card
-  template: charging_template
-  variables:
-    templateId: ${id}
-    templateName: ${name}
+type: grid
+cards:
+  - type: heading
+    heading: "Ladeprofil ${name} - (ID: ${id})"
+    heading_style: title
+  - type: heading
+    icon: ""
+    heading: Allgemeine Optionen
+    heading_style: subtitle
+  - type: custom:mod-card
+    card_mod:
+      style: |
+        ha-card {
+          box-shadow: none;
+          border: none;
+          background: none;
+        }
+    card:
+      type: grid
+      columns: 5
+      square: false
+      cards:
+        - type: custom:button-card
+          name: Sofort
+          icon: mdi:flash
+          entity: select.openwb_charge_template_${id}_chargemode_selected
+          layout: icon_name
+          tap_action:
+            action: call-service
+            service: select.select_option
+            service_data:
+              entity_id: select.openwb_charge_template_${id}_chargemode_selected
+              option: instant_charging
+          state:
+            - value: instant_charging
+              styles:
+                card:
+                  - background-color: red
+                name:
+                  - font-weight: bold
+                icon:
+                  - color: white
+          styles:
+            card:
+              - border: 1px solid
+              - padding: 4px
+              - height: 36px
+            name:
+              - font-size: 13px
+              - align-self: center
+            icon:
+              - width: 18px
+              - height: 18px
+        - type: custom:button-card
+          name: PV
+          icon: mdi:solar-power
+          entity: select.openwb_charge_template_${id}_chargemode_selected
+          layout: icon_name
+          tap_action:
+            action: call-service
+            service: select.select_option
+            service_data:
+              entity_id: select.openwb_charge_template_${id}_chargemode_selected
+              option: pv_charging
+          state:
+            - value: pv_charging
+              styles:
+                card:
+                  - background-color: green
+                name:
+                  - color: white
+                  - font-weight: bold
+                icon:
+                  - color: white
+          styles:
+            card:
+              - border: 1px solid
+              - padding: 4px
+              - height: 36px
+            name:
+              - font-size: 13px
+              - align-self: center
+            icon:
+              - width: 18px
+              - height: 18px
+        - type: custom:button-card
+          name: Ziel
+          icon: mdi:flag-checkered
+          entity: select.openwb_charge_template_${id}_chargemode_selected
+          layout: icon_name
+          tap_action:
+            action: call-service
+            service: select.select_option
+            service_data:
+              entity_id: select.openwb_charge_template_${id}_chargemode_selected
+              option: scheduled_charging
+          state:
+            - value: scheduled_charging
+              styles:
+                card:
+                  - background-color: blue
+                name:
+                  - color: white
+                icon:
+                  - color: white
+          styles:
+            card:
+              - border: 1px solid
+              - padding: 4px
+              - height: 36px
+            name:
+              - font-size: 13px
+              - align-self: center
+            icon:
+              - width: 18px
+              - height: 18px
+        - type: custom:button-card
+          name: Eco
+          icon: mdi:leaf
+          entity: select.openwb_charge_template_${id}_chargemode_selected
+          layout: icon_name
+          tap_action:
+            action: call-service
+            service: select.select_option
+            service_data:
+              entity_id: select.openwb_charge_template_${id}_chargemode_selected
+              option: eco_charging
+          state:
+            - value: eco_charging
+              styles:
+                card:
+                  - background-color: grey
+                name:
+                  - font-weight: bold
+                icon:
+                  - color: white
+          styles:
+            card:
+              - border: 1px solid
+              - padding: 4px
+              - height: 36px
+            name:
+              - font-size: 13px
+              - align-self: center
+            icon:
+              - width: 18px
+              - height: 18px
+        - type: custom:button-card
+          name: Stop
+          icon: mdi:stop-circle-outline
+          entity: select.openwb_charge_template_${id}_chargemode_selected
+          layout: icon_name
+          tap_action:
+            action: call-service
+            service: select.select_option
+            service_data:
+              entity_id: select.openwb_charge_template_${id}_chargemode_selected
+              option: stop
+          state:
+            - value: stop
+              styles:
+                card:
+                  - background-color: black
+                name:
+                  - color: white
+                  - font-weight: bold
+                icon:
+                  - color: white
+          styles:
+            card:
+              - border: 1px solid
+              - padding: 4px
+              - height: 36px
+            name:
+              - font-size: 13px
+              - align-self: center
+            icon:
+              - width: 18px
+              - height: 18px
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 2fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Prio
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: Ja
+        icon: mdi:check
+        entity: switch.openwb_charge_template_${id}_prio
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: switch.turn_on
+          service_data:
+            entity_id: switch.openwb_charge_template_${id}_prio
+        state:
+          - value: "on"
+            styles:
+              card:
+                - background-color: green
+              name:
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: green
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Nein
+        icon: mdi:cancel
+        entity: switch.openwb_charge_template_${id}_prio
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: switch.turn_off
+          service_data:
+            entity_id: switch.openwb_charge_template_${id}_prio
+        state:
+          - value: "off"
+            styles:
+              card:
+                - background-color: red
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: red
+          name:
+            - font-size: 13px
+            - align-self: center
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 2fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Zeitladen
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: Ja
+        icon: mdi:check
+        entity: switch.openwb_charge_template_${id}_time_charging_active
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: switch.turn_on
+          service_data:
+            entity_id: switch.openwb_charge_template_${id}_time_charging_active
+        state:
+          - value: "on"
+            styles:
+              card:
+                - background-color: green
+              name:
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: green
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Nein
+        icon: mdi:cancel
+        entity: switch.openwb_charge_template_${id}_time_charging_active
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: switch.turn_off
+          service_data:
+            entity_id: switch.openwb_charge_template_${id}_time_charging_active
+        state:
+          - value: "off"
+            styles:
+              card:
+                - background-color: red
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: red
+          name:
+            - font-size: 13px
+            - align-self: center
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 2fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Standard nach Abstecken
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: Ja
+        icon: mdi:check
+        entity: switch.openwb_charge_template_${id}_load_default
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: switch.turn_on
+          service_data:
+            entity_id: switch.openwb_charge_template_${id}_load_default
+        state:
+          - value: "on"
+            styles:
+              card:
+                - background-color: green
+              name:
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: green
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Nein
+        icon: mdi:cancel
+        entity: switch.openwb_charge_template_${id}_load_default
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: switch.turn_off
+          service_data:
+            entity_id: switch.openwb_charge_template_${id}_load_default
+        state:
+          - value: "off"
+            styles:
+              card:
+                - background-color: red
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: red
+          name:
+            - font-size: 13px
+            - align-self: center
+  - type: heading
+    icon: ""
+    heading: Sofort
+    heading_style: subtitle
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 3fr 3fr 0fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Soll-Ladestrom
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:slider-button-card
+        entity: number.openwb_charge_template_${id}_chargemode_instant_charging_current
+        icon: mdi:flash
+        show_name: false
+        show_icon: true
+        show_value: true
+        compact: true
+        attribute: unit_of_measurement
+        show_attribute: false
+        show_state: true
+        action_button:
+          show: false
+        slider:
+          direction: left-right
+          steps: 1
+          max: 32
+          min: 6
+          show_track: false
+          background: gradient
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 2fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Anzahl Phasen
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: 1
+        icon: mdi:numeric-1-box-outline
+        entity: >-
+          select.openwb_charge_template_${id}_chargemode_instant_charging_phases_to_use
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_instant_charging_phases_to_use
+            option: "1"
+        state:
+          - value: "1"
+            styles:
+              card:
+                - background-color: green
+              name:
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: green
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Max
+        icon: mdi:numeric-3-box-multiple-outline
+        entity: >-
+          select.openwb_charge_template_${id}_chargemode_instant_charging_phases_to_use
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_instant_charging_phases_to_use
+            option: "3"
+        state:
+          - value: "3"
+            styles:
+              card:
+                - background-color: "#17A2B8"
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: "#17A2B8"
+          name:
+            - font-size: 13px
+            - align-self: center
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 2fr 1fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Begrenzung
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: Aus
+        icon: mdi:cancel
+        entity: >-
+          select.openwb_charge_template_${id}_chargemode_instant_charging_limit_selected
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_instant_charging_limit_selected
+            option: none
+        state:
+          - value: none
+            styles:
+              card:
+                - background-color: red
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: red
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: SoC
+        icon: mdi:car-battery
+        entity: >-
+          select.openwb_charge_template_${id}_chargemode_instant_charging_limit_selected
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_instant_charging_limit_selected
+            option: soc
+        state:
+          - value: soc
+            styles:
+              card:
+                - background-color: green
+              name:
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: green
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Energie
+        icon: mdi:flash
+        entity: >-
+          select.openwb_charge_template_${id}_chargemode_instant_charging_limit_selected
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_instant_charging_limit_selected
+            option: amount
+        state:
+          - value: amount
+            styles:
+              card:
+                - background-color: "#17A2B8"
+              name:
+                - font-weight: bold
+                - color: white
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: "#17A2B8"
+          name:
+            - font-size: 13px
+            - align-self: center
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 3fr 3fr 0fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: SoC Limit für das Fahrzeug
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:slider-button-card
+        entity: number.openwb_charge_template_${id}_chargemode_instant_charging_limit_soc
+        icon: mdi:flash
+        show_name: false
+        show_icon: true
+        show_value: true
+        compact: true
+        attribute: unit_of_measurement
+        show_attribute: false
+        show_state: true
+        action_button:
+          show: false
+        slider:
+          direction: left-right
+          steps: 1
+          max: 100
+          min: 0
+          show_track: false
+          background: gradient
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 3fr 1fr 1fr 2fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Energie-Limit
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: "10"
+        icon: mdi:minus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: >-
+              number.openwb_charge_template_${id}_chargemode_instant_charging_limit_amount
+            value: |
+              [[[ return Math.min(100000, Number(entity.state) - 10000); ]]]
+        entity: >-
+          number.openwb_charge_template_${id}_chargemode_instant_charging_limit_amount
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+      - type: custom:button-card
+        name: "1"
+        icon: mdi:minus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: >-
+              number.openwb_charge_template_${id}_chargemode_instant_charging_limit_amount
+            value: |
+              [[[ return Math.max(0, entity.state - 1000); ]]]
+        entity: >-
+          number.openwb_charge_template_${id}_chargemode_instant_charging_limit_amount
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+      - type: custom:button-card
+        name: "[[[ return (Number(entity.state) / 1000).toFixed(1) + ' kWh' ]]]"
+        show_icon: false
+        entity: >-
+          number.openwb_charge_template_${id}_chargemode_instant_charging_limit_amount
+        tap_action:
+          action: none
+        styles:
+          card:
+            - height: 36px
+            - background: none
+            - border: none
+          name:
+            - font-size: 15px
+            - font-weight: bold
+            - color: white
+            - justify-self: center
+            - align-self: center
+      - type: custom:button-card
+        name: "1"
+        icon: mdi:plus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: >-
+              number.openwb_charge_template_${id}_chargemode_instant_charging_limit_amount
+            value: |
+              [[[ return Math.min(100000, Number(entity.state) + 1000); ]]]
+        entity: >-
+          number.openwb_charge_template_${id}_chargemode_instant_charging_limit_amount
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+      - type: custom:button-card
+        name: "10"
+        icon: mdi:plus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: >-
+              number.openwb_charge_template_${id}_chargemode_instant_charging_limit_amount
+            value: |
+              [[[ return Math.min(100000, Number(entity.state) + 10000); ]]]
+        entity: >-
+          number.openwb_charge_template_${id}_chargemode_instant_charging_limit_amount
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+  - type: heading
+    icon: ""
+    heading: PV
+    heading_style: subtitle
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 3fr 3fr 0fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Minimaler Dauerstrom
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:slider-button-card
+        entity: number.openwb_charge_template_${id}_chargemode_pv_charging_min_current
+        icon: mdi:flash
+        show_name: false
+        show_icon: true
+        show_value: true
+        compact: true
+        attribute: unit_of_measurement
+        show_attribute: false
+        show_state: true
+        action_button:
+          show: false
+        slider:
+          direction: left-right
+          steps: 1
+          max: 16
+          min: 0
+          show_track: false
+          background: gradient
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 2fr 1fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Anzahl Phasen
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: 1
+        icon: mdi:numeric-1-box-outline
+        entity: select.openwb_charge_template_${id}_chargemode_pv_charging_phases_to_use
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_pv_charging_phases_to_use
+            option: "1"
+        state:
+          - value: "1"
+            styles:
+              card:
+                - background-color: green
+              name:
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: green
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Max
+        icon: mdi:numeric-3-box-multiple-outline
+        entity: select.openwb_charge_template_${id}_chargemode_pv_charging_phases_to_use
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_pv_charging_phases_to_use
+            option: "3"
+        state:
+          - value: "3"
+            styles:
+              card:
+                - background-color: blue
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: blue
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Auto
+        icon: mdi:numeric
+        entity: select.openwb_charge_template_${id}_chargemode_pv_charging_phases_to_use
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_pv_charging_phases_to_use
+            option: "0"
+        state:
+          - value: "0"
+            styles:
+              card:
+                - background-color: "#17A2B8"
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: "#17A2B8"
+          name:
+            - font-size: 13px
+            - align-self: center
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 2fr 1fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Begrenzung
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: Aus
+        icon: mdi:cancel
+        entity: select.openwb_charge_template_${id}_chargemode_pv_charging_limit_selected
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_pv_charging_limit_selected
+            option: none
+        state:
+          - value: none
+            styles:
+              card:
+                - background-color: red
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: red
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: SoC
+        icon: mdi:car-battery
+        entity: select.openwb_charge_template_${id}_chargemode_pv_charging_limit_selected
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_pv_charging_limit_selected
+            option: soc
+        state:
+          - value: soc
+            styles:
+              card:
+                - background-color: green
+              name:
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: green
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Energie
+        icon: mdi:flash
+        entity: select.openwb_charge_template_${id}_chargemode_pv_charging_limit_selected
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_pv_charging_limit_selected
+            option: amount
+        state:
+          - value: amount
+            styles:
+              card:
+                - background-color: "#17A2B8"
+              name:
+                - font-weight: bold
+                - color: white
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: "#17A2B8"
+          name:
+            - font-size: 13px
+            - align-self: center
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 3fr 3fr 0fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: SoC Limit für das Fahrzeug
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:slider-button-card
+        entity: number.openwb_charge_template_${id}_chargemode_pv_charging_limit_soc
+        icon: mdi:flash
+        show_name: false
+        show_icon: true
+        show_value: true
+        compact: true
+        attribute: unit_of_measurement
+        show_attribute: false
+        show_state: true
+        action_button:
+          show: false
+        slider:
+          direction: left-right
+          steps: 1
+          max: 100
+          min: 0
+          show_track: false
+          background: gradient
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 3fr 1fr 1fr 2fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Energie-Limit
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: "10"
+        icon: mdi:minus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: >-
+              number.openwb_charge_template_${id}_chargemode_pv_charging_limit_amount
+            value: |
+              [[[ return Math.min(100000, Number(entity.state) - 10000); ]]]
+        entity: number.openwb_charge_template_${id}_chargemode_pv_charging_limit_amount
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+      - type: custom:button-card
+        name: "1"
+        icon: mdi:minus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: >-
+              number.openwb_charge_template_${id}_chargemode_pv_charging_limit_amount
+            value: |
+              [[[ return Math.max(0, entity.state - 1000); ]]]
+        entity: number.openwb_charge_template_${id}_chargemode_pv_charging_limit_amount
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+      - type: custom:button-card
+        name: "[[[ return (Number(entity.state) / 1000).toFixed(1) + ' kWh' ]]]"
+        show_icon: false
+        entity: number.openwb_charge_template_${id}_chargemode_pv_charging_limit_amount
+        tap_action:
+          action: none
+        styles:
+          card:
+            - height: 36px
+            - background: none
+            - border: none
+          name:
+            - font-size: 15px
+            - font-weight: bold
+            - color: white
+            - justify-self: center
+            - align-self: center
+      - type: custom:button-card
+        name: "1"
+        icon: mdi:plus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: >-
+              number.openwb_charge_template_${id}_chargemode_pv_charging_limit_amount
+            value: |
+              [[[ return Math.min(100000, Number(entity.state) + 1000); ]]]
+        entity: number.openwb_charge_template_${id}_chargemode_pv_charging_limit_amount
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+      - type: custom:button-card
+        name: "10"
+        icon: mdi:plus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: >-
+              number.openwb_charge_template_${id}_chargemode_pv_charging_limit_amount
+            value: |
+              [[[ return Math.min(100000, Number(entity.state) + 10000); ]]]
+        entity: number.openwb_charge_template_${id}_chargemode_pv_charging_limit_amount
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 3fr 3fr 0fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Mindest-SoC für das Fahrzeug
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:slider-button-card
+        entity: number.openwb_charge_template_${id}_chargemode_pv_charging_min_soc
+        icon: mdi:flash
+        show_name: false
+        show_icon: true
+        show_value: true
+        compact: true
+        attribute: unit_of_measurement
+        show_attribute: false
+        show_state: true
+        action_button:
+          show: false
+        slider:
+          direction: left-right
+          steps: 1
+          max: 100
+          min: 0
+          show_track: false
+          background: gradient
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 3fr 3fr 0fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Mindest-SoC Strom
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:slider-button-card
+        entity: number.openwb_charge_template_${id}_chargemode_pv_charging_min_soc_current
+        icon: mdi:flash
+        show_name: false
+        show_icon: true
+        show_value: true
+        compact: true
+        attribute: unit_of_measurement
+        show_attribute: false
+        show_state: true
+        action_button:
+          show: false
+        slider:
+          direction: left-right
+          steps: 1
+          max: 16
+          min: 6
+          show_track: false
+          background: gradient
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 2fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Anzahl Phasen Mindest-SoC
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: 1
+        icon: mdi:numeric-1-box-outline
+        entity: >-
+          select.openwb_charge_template_${id}_chargemode_pv_charging_phases_to_use_min_soc
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_pv_charging_phases_to_use_min_soc
+            option: "1"
+        state:
+          - value: "1"
+            styles:
+              card:
+                - background-color: green
+              name:
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: green
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Max
+        icon: mdi:numeric-3-box-multiple-outline
+        entity: >-
+          select.openwb_charge_template_${id}_chargemode_pv_charging_phases_to_use_min_soc
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_pv_charging_phases_to_use_min_soc
+            option: "3"
+        state:
+          - value: "3"
+            styles:
+              card:
+                - background-color: "#17A2B8"
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: "#17A2B8"
+          name:
+            - font-size: 13px
+            - align-self: center
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 2fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Einspeisegrenze beachten
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: Ja
+        icon: mdi:check
+        entity: switch.openwb_charge_template_${id}_chargemode_pv_charging_feed_in_limit
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: switch.turn_on
+          service_data:
+            entity_id: >-
+              switch.openwb_charge_template_${id}_chargemode_pv_charging_feed_in_limit
+        state:
+          - value: "on"
+            styles:
+              card:
+                - background-color: green
+              name:
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: green
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Nein
+        icon: mdi:cancel
+        entity: switch.openwb_charge_template_${id}_chargemode_pv_charging_feed_in_limit
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: switch.turn_off
+          service_data:
+            entity_id: >-
+              switch.openwb_charge_template_${id}_chargemode_pv_charging_feed_in_limit
+        state:
+          - value: "off"
+            styles:
+              card:
+                - background-color: red
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: red
+          name:
+            - font-size: 13px
+            - align-self: center
+  - type: heading
+    icon: ""
+    heading: Eco
+    heading_style: subtitle
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 3fr 3fr 0fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Min. Strom (unter Preislimit)
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:slider-button-card
+        entity: number.openwb_charge_template_${id}_chargemode_eco_charging_current
+        icon: mdi:flash
+        show_name: false
+        show_icon: true
+        show_value: true
+        compact: true
+        attribute: unit_of_measurement
+        show_attribute: false
+        show_state: true
+        action_button:
+          show: false
+        slider:
+          direction: left-right
+          steps: 1
+          max: 16
+          min: 6
+          show_track: false
+          background: gradient
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 2fr 1fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Anzahl Phasen
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: 1
+        icon: mdi:numeric-1-box-outline
+        entity: select.openwb_charge_template_${id}_chargemode_eco_charging_phases_to_use
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_eco_charging_phases_to_use
+            option: "1"
+        state:
+          - value: "1"
+            styles:
+              card:
+                - background-color: green
+              name:
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: green
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Max
+        icon: mdi:numeric-3-box-multiple-outline
+        entity: select.openwb_charge_template_${id}_chargemode_eco_charging_phases_to_use
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_eco_charging_phases_to_use
+            option: "3"
+        state:
+          - value: "3"
+            styles:
+              card:
+                - background-color: blue
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: blue
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Auto
+        icon: mdi:numeric
+        entity: select.openwb_charge_template_${id}_chargemode_eco_charging_phases_to_use
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_eco_charging_phases_to_use
+            option: "0"
+        state:
+          - value: "0"
+            styles:
+              card:
+                - background-color: "#17A2B8"
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: "#17A2B8"
+          name:
+            - font-size: 13px
+            - align-self: center
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 2fr 1fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Begrenzung
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: Aus
+        icon: mdi:cancel
+        entity: select.openwb_charge_template_${id}_chargemode_eco_charging_limit_selected
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_eco_charging_limit_selected
+            option: none
+        state:
+          - value: none
+            styles:
+              card:
+                - background-color: red
+              name:
+                - color: white
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: red
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: SoC
+        icon: mdi:car-battery
+        entity: select.openwb_charge_template_${id}_chargemode_eco_charging_limit_selected
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_eco_charging_limit_selected
+            option: soc
+        state:
+          - value: soc
+            styles:
+              card:
+                - background-color: green
+              name:
+                - font-weight: bold
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: green
+          name:
+            - font-size: 13px
+            - align-self: center
+      - type: custom:button-card
+        name: Energie
+        icon: mdi:flash
+        entity: select.openwb_charge_template_${id}_chargemode_eco_charging_limit_selected
+        layout: icon_name
+        tap_action:
+          action: call-service
+          service: select.select_option
+          service_data:
+            entity_id: >-
+              select.openwb_charge_template_${id}_chargemode_eco_charging_limit_selected
+            option: amount
+        state:
+          - value: amount
+            styles:
+              card:
+                - background-color: "#17A2B8"
+              name:
+                - font-weight: bold
+                - color: white
+              icon:
+                - color: white
+        styles:
+          card:
+            - border: 1px solid
+            - padding: 4px
+            - height: 36px
+          icon:
+            - width: 18px
+            - height: 18px
+            - color: "#17A2B8"
+          name:
+            - font-size: 13px
+            - align-self: center
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 3fr 3fr 0fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: SoC Limit für das Fahrzeug
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:slider-button-card
+        entity: number.openwb_charge_template_${id}_chargemode_eco_charging_limit_soc
+        icon: mdi:flash
+        show_name: false
+        show_icon: true
+        show_value: true
+        compact: true
+        attribute: unit_of_measurement
+        show_attribute: false
+        show_state: true
+        action_button:
+          show: false
+        slider:
+          direction: left-right
+          steps: 1
+          max: 100
+          min: 0
+          show_track: false
+          background: gradient
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 3fr 1fr 1fr 2fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Energie-Limit
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: "10"
+        icon: mdi:minus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: >-
+              number.openwb_charge_template_${id}_chargemode_eco_charging_limit_amount
+            value: |
+              [[[ return Math.min(100000, Number(entity.state) - 10000); ]]]
+        entity: number.openwb_charge_template_${id}_chargemode_eco_charging_limit_amount
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+      - type: custom:button-card
+        name: "1"
+        icon: mdi:minus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: >-
+              number.openwb_charge_template_${id}_chargemode_eco_charging_limit_amount
+            value: |
+              [[[ return Math.max(0, entity.state - 1000); ]]]
+        entity: number.openwb_charge_template_${id}_chargemode_eco_charging_limit_amount
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+      - type: custom:button-card
+        name: "[[[ return (Number(entity.state) / 1000).toFixed(1) + ' kWh' ]]]"
+        show_icon: false
+        entity: number.openwb_charge_template_${id}_chargemode_eco_charging_limit_amount
+        tap_action:
+          action: none
+        styles:
+          card:
+            - height: 36px
+            - background: none
+            - border: none
+          name:
+            - font-size: 15px
+            - font-weight: bold
+            - color: white
+            - justify-self: center
+            - align-self: center
+      - type: custom:button-card
+        name: "1"
+        icon: mdi:plus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: >-
+              number.openwb_charge_template_${id}_chargemode_eco_charging_limit_amount
+            value: |
+              [[[ return Math.min(100000, Number(entity.state) + 1000); ]]]
+        entity: number.openwb_charge_template_${id}_chargemode_eco_charging_limit_amount
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+      - type: custom:button-card
+        name: "10"
+        icon: mdi:plus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: >-
+              number.openwb_charge_template_${id}_chargemode_eco_charging_limit_amount
+            value: |
+              [[[ return Math.min(100000, Number(entity.state) + 10000); ]]]
+        entity: number.openwb_charge_template_${id}_chargemode_eco_charging_limit_amount
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+  - type: custom:layout-card
+    layout_type: custom:grid-layout
+    layout:
+      grid-template-columns: 3fr 1fr 1fr 2fr 1fr 1fr
+      grid-auto-flow: column
+    cards:
+      - type: custom:button-card
+        name: Preisgrenze
+        show_icon: false
+        tap_action:
+          action: none
+        styles:
+          card:
+            - background: none
+            - border: none
+            - box-shadow: none
+            - padding: 4px 8px
+            - height: 36px
+          name:
+            - font-size: 14px
+            - font-weight: bold
+            - justify-self: start
+            - align-self: center
+      - type: custom:button-card
+        name: "10"
+        icon: mdi:minus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: number.openwb_charge_template_${id}_chargemode_eco_charging_max_price
+            value: |
+              [[[ return Math.min(100000, Number(entity.state) - 10000); ]]]
+        entity: number.openwb_charge_template_${id}_chargemode_eco_charging_max_price
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+      - type: custom:button-card
+        name: "1"
+        icon: mdi:minus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: number.openwb_charge_template_${id}_chargemode_eco_charging_max_price
+            value: |
+              [[[ return Math.max(0, entity.state - 1000); ]]]
+        entity: number.openwb_charge_template_${id}_chargemode_eco_charging_max_price
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+      - type: custom:button-card
+        name: "[[[ return (Number(entity.state) / 1000).toFixed(1) + ' ct/kWh' ]]]"
+        show_icon: false
+        entity: number.openwb_charge_template_${id}_chargemode_eco_charging_max_price
+        tap_action:
+          action: none
+        styles:
+          card:
+            - height: 36px
+            - background: none
+            - border: none
+          name:
+            - font-size: 15px
+            - font-weight: bold
+            - color: white
+            - justify-self: center
+            - align-self: center
+      - type: custom:button-card
+        name: "1"
+        icon: mdi:plus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: number.openwb_charge_template_${id}_chargemode_eco_charging_max_price
+            value: |
+              [[[ return Math.min(100000, Number(entity.state) + 1000); ]]]
+        entity: number.openwb_charge_template_${id}_chargemode_eco_charging_max_price
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+      - type: custom:button-card
+        name: "10"
+        icon: mdi:plus
+        tap_action:
+          action: call-service
+          service: number.set_value
+          data:
+            entity_id: number.openwb_charge_template_${id}_chargemode_eco_charging_max_price
+            value: |
+              [[[ return Math.min(100000, Number(entity.state) + 10000); ]]]
+        entity: number.openwb_charge_template_${id}_chargemode_eco_charging_max_price
+        styles:
+          card:
+            - height: 36px
+            - border: 1px solid rgba(255,255,255,0.3)
+            - background-color: null
+          icon:
+            - color: white
+column_span: 1
+
 `.trim();
+
       document.getElementById("output").value = yaml;
     }
   </script>
