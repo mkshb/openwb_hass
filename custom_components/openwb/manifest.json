@@ -1,7 +1,7 @@
 {
   "domain": "openwb",
   "name": "openWB",
-  "version": "0.8.3",
+  "version": "v0.8.3",
   "config_flow": true,
   "documentation": "https://github.com/mkshb/openwb_hass",
   "requirements": [],
