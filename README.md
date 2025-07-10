@@ -309,6 +309,7 @@ Einfaches Generieren von Home Assistant Dashboard-Elementen.
 
 # Screenshots
 
+![Charging Template HASS Dashboard](custom_components/openwb/images/chargingtemplatedashboard.png)
 ![Overview Entities](custom_components/openwb/images/overview-entities.png)
 ![Example Entities](custom_components/openwb/images/example-entities.png)
 ![Change Charging Template](custom_components/openwb/images/change-charging-template.png)
