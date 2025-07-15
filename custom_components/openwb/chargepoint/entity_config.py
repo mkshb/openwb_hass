@@ -4,8 +4,8 @@ UNIT_MAP = {
     "powers": "W",
     "voltages": "V",
     "power": "W",
-    "imported": "kWh",
-    "exported": "kWh",
+    "imported": "Wh",
+    "exported": "Wh",
     "frequency": "Hz",
 }
 

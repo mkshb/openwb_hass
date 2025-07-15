@@ -2,10 +2,10 @@ UNIT_MAP = {
     "power": "W",
     "current": "A",
     "voltage": "V",
-    "imported": "kWh",
-    "exported": "kWh",
+    "imported": "Wh",
+    "exported": "Wh",
     "frequency": "Hz",
-    "energy": "kWh",
+    "energy": "Wh",
 }
 
 ICON_MAP = {

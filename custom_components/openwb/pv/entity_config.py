@@ -1,7 +1,7 @@
 UNIT_MAP = {
     "soc": "%",
-    "imported": "kWh",
-    "exported": "kWh",
+    "imported": "Wh",
+    "exported": "Wh",
     "power": "W",
     "current": "A",
     "voltage": "V",
