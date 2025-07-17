@@ -1,7 +1,7 @@
 import json
 import logging
 from .entities import OpenWBChargepointSensor
-from .entity_config import UNIT_MAP, ICON_MAP
+from .entity_config import SENSOR_DEFINITION_MAP
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -9,18 +9,11 @@ def create_chargepoint_entity(dev_id: str, topic: str, subkey: str, payload: str
     key = subkey.replace("/", "_").lower()
     pretty_key = key.replace("config_", "").replace("get_", "").replace("_", " ").title()
 
-    unit = None
-    icon = ICON_MAP.get("default")
+    _LOGGER.info("Sub-Wert " + pretty_key + " (" + key + ") für " + topic + " empfangen: " + payload)
 
-    for pattern, u in UNIT_MAP.items():
-        if pattern in key:
-            unit = u
-            break
-
-    for pattern, i in ICON_MAP.items():
-        if pattern in key:
-            icon = i
-            break
+    definition = SENSOR_DEFINITION_MAP.get(key, SENSOR_DEFINITION_MAP["default"])
+    unit = definition.get("unit")
+    icon = definition.get("icon", SENSOR_DEFINITION_MAP["default"]["icon"])
 
     # Phasenwerte (z. B. [1.2, 1.3, 1.4])
     try:
